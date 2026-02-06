@@ -368,15 +368,15 @@ h3{margin:0; font-size:15px}
   flex-shrink:0;
 }
 
-/* Hide Map button on mobile */
-@media (max-width: 600px){
-  .btn-map{
-    display:none;
-  }
-}
-
 @media (max-width: 600px){
   #langBtn{
     margin-left:auto;
+  }
+}
+
+/* Hide Map button ONLY in header on mobile */
+@media (max-width: 600px){
+  .topbar .btn-map{
+    display:none;
   }
 }
