@@ -364,5 +364,6 @@ h3{margin:0; font-size:15px}
 .ico-img{
   width:18px;
   height:18px;
-  display:block;
+  object-fit:contain;
+  flex-shrink:0;
 }
