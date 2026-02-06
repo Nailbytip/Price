@@ -104,3 +104,50 @@ document.querySelectorAll(".shot[data-full]").forEach(btn => {
 if (lbClose) lbClose.addEventListener("click", closeLightbox);
 if (lb) lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
+
+// --- Random gallery (6 photos out of 19) ---
+(function randomGallery(){
+  const gallery = document.getElementById("gallery");
+  if (!gallery) return;
+
+  const TOTAL = 19;      // how many photos in /photos
+  const SHOW = 6;        // how many to display
+
+  // Build list [1..TOTAL]
+  const all = Array.from({ length: TOTAL }, (_, i) => i + 1);
+
+  // Shuffle (Fisher-Yates)
+  for (let i = all.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]];
+  }
+
+  const pick = all.slice(0, SHOW);
+
+  // Cache-bust param so refresh shows a different mix even with aggressive caching
+  const bust = Date.now();
+
+  gallery.innerHTML = pick.map(n => {
+    const src = `photos/${n}.jpg?v=${bust}`;
+    return `
+      <button class="shot" type="button" data-full="photos/${n}.jpg?v=${bust}">
+        <img loading="lazy" src="${src}" alt="Nail by Tip work ${n}">
+      </button>
+    `;
+  }).join("");
+
+  // Hook into your existing lightbox (if present)
+  const lb = document.getElementById("lightbox");
+  const lbImg = document.getElementById("lightboxImg");
+  const openLightbox = (src) => {
+    if (!lb || !lbImg) return;
+    lbImg.src = src;
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+  };
+
+  document.querySelectorAll("#gallery .shot[data-full]").forEach(btn => {
+    btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-full")));
+  });
+})();
