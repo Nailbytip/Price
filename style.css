@@ -367,3 +367,10 @@ h3{margin:0; font-size:15px}
   object-fit:contain;
   flex-shrink:0;
 }
+
+/* Hide Map button on mobile */
+@media (max-width: 600px){
+  .btn-map{
+    display:none;
+  }
+}
