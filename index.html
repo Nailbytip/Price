@@ -8,6 +8,13 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-inner" role="dialog" aria-modal="true">
+    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">✕</button>
+    <img class="lightbox-img" id="lightboxImg" alt="Work photo zoomed">
+  </div>
+</div>
+  
 <body id="top">
   <header class="topbar">
     <div class="wrap header">
@@ -180,13 +187,13 @@
       </p>
 
       <div class="gallery">
-        <a class="shot" href="photos/1.jpg"><img loading="lazy" src="photos/1.jpg" alt="Nail by Tip work 1"></a>
-        <a class="shot" href="photos/2.jpg"><img loading="lazy" src="photos/2.jpg" alt="Nail by Tip work 2"></a>
-        <a class="shot" href="photos/3.jpg"><img loading="lazy" src="photos/3.jpg" alt="Nail by Tip work 3"></a>
-        <a class="shot" href="photos/4.jpg"><img loading="lazy" src="photos/4.jpg" alt="Nail by Tip work 4"></a>
-        <a class="shot" href="photos/5.jpg"><img loading="lazy" src="photos/5.jpg" alt="Nail by Tip work 5"></a>
-        <a class="shot" href="photos/6.jpg"><img loading="lazy" src="photos/6.jpg" alt="Nail by Tip work 6"></a>
-      </div>
+  <button class="shot" type="button" data-full="photos/1.jpg"><img loading="lazy" src="photos/1.jpg" alt="Nail by Tip work 1"></button>
+  <button class="shot" type="button" data-full="photos/2.jpg"><img loading="lazy" src="photos/2.jpg" alt="Nail by Tip work 2"></button>
+  <button class="shot" type="button" data-full="photos/3.jpg"><img loading="lazy" src="photos/3.jpg" alt="Nail by Tip work 3"></button>
+  <button class="shot" type="button" data-full="photos/4.jpg"><img loading="lazy" src="photos/4.jpg" alt="Nail by Tip work 4"></button>
+  <button class="shot" type="button" data-full="photos/5.jpg"><img loading="lazy" src="photos/5.jpg" alt="Nail by Tip work 5"></button>
+  <button class="shot" type="button" data-full="photos/6.jpg"><img loading="lazy" src="photos/6.jpg" alt="Nail by Tip work 6"></button>
+</div>
     </section>
 
     <section class="card reveal" id="map">
