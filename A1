@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Koh Chang Nail Studio — Prices</title>
+  <meta name="description" content="Nail studio in Koh Chang — price menu (scan QR)." />
+
+  <!-- Optional: Google Analytics GA4 (replace G-XXXXXXX) -->
+  <!--
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
+  -->
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="wrap">
+    <div class="brand">
+      <div class="logo">💅</div>
+      <div>
+        <h1>Koh Chang Nail Studio</h1>
+        <p class="sub">Price menu • เมนูราคา • Updated live</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <!-- Replace with your real links -->
+      <a class="btn" href="https://line.me/R/ti/p/~YOUR_LINE_ID" target="_blank" rel="noreferrer">LINE</a>
+      <a class="btn" href="https://wa.me/66XXXXXXXXX" target="_blank" rel="noreferrer">WhatsApp</a>
+      <a class="btn ghost" href="#map">Map</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card highlight">
+      <div>
+        <h2>Today’s quick info</h2>
+        <ul class="bullets">
+          <li><strong>Walk-in</strong> ok when available</li>
+          <li><strong>Best:</strong> book on LINE</li>
+          <li><strong>Payment:</strong> cash / transfer</li>
+        </ul>
+      </div>
+      <div class="small">
+        <div class="pill">⏱️ Avg. time: 45–90 min</div>
+        <div class="pill">📍 Koh Chang</div>
+        <div class="pill" id="updatedPill">Updated: —</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h3>Manicure</h3>
+        <div class="row"><span>Classic manicure</span><span>200 THB</span></div>
+        <div class="row"><span>Manicure + polish</span><span>300 THB</span></div>
+        <div class="row"><span>Cuticle care</span><span>150 THB</span></div>
+        <p class="note">* Prices may vary with nail length/condition.</p>
+      </article>
+
+      <article class="card">
+        <h3>Gel</h3>
+        <div class="row"><span>Gel color</span><span>500 THB</span></div>
+        <div class="row"><span>Gel French</span><span>650 THB</span></div>
+        <div class="row"><span>Gel removal</span><span>150 THB</span></div>
+        <p class="note">Add-ons: art / stones / chrome.</p>
+      </article>
+
+      <article class="card">
+        <h3>Extensions</h3>
+        <div class="row"><span>Extension (short)</span><span>900 THB</span></div>
+        <div class="row"><span>Extension (long)</span><span>1200 THB</span></div>
+        <div class="row"><span>Refill</span><span>700 THB</span></div>
+        <p class="note">Length categories can be shown in photo at the shop.</p>
+      </article>
+
+      <article class="card">
+        <h3>Design / Extras</h3>
+        <div class="row"><span>Simple nail art (per nail)</span><span>20–50 THB</span></div>
+        <div class="row"><span>Stones (per piece)</span><span>10–30 THB</span></div>
+        <div class="row"><span>Chrome / cat-eye</span><span>+150 THB</span></div>
+        <p class="note">Show a reference pic on your phone.</p>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>Promos</h2>
+      <p class="muted">You can update this section anytime (no reprint of QR).</p>
+      <div class="promo">
+        <div><strong>Gel + simple art</strong> <span class="muted">Mon–Thu</span></div>
+        <div><strong>650 THB</strong></div>
+      </div>
+    </section>
+
+    <section class="card" id="map">
+      <h2>Location</h2>
+      <p class="muted">Replace the map link with your Google Maps place link.</p>
+      <a class="btn" href="https://maps.google.com/?q=Koh+Chang+Nail+Studio" target="_blank" rel="noreferrer">Open in Google Maps</a>
+    </section>
+
+    <footer class="footer">
+      <p class="muted">© <span id="year"></span> Koh Chang Nail Studio • QR menu</p>
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
