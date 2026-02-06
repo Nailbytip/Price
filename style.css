@@ -326,3 +326,13 @@ h3{margin:0; font-size:15px}
   cursor:pointer;
 }
 .lightbox-close:hover{transform: translateY(-1px)}
+
+
+.mark-logo{padding:0}
+.mark-logo img{
+  width:44px;
+  height:44px;
+  border-radius:16px;
+  object-fit:cover;
+  display:block;
+}
