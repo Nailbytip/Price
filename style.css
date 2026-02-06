@@ -380,3 +380,21 @@ h3{margin:0; font-size:15px}
     display:none;
   }
 }
+
+/* Instagram link above photos */
+.insta-line{
+  margin: 6px 0 10px;
+}
+
+.insta-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.insta-link:hover{
+  text-decoration:underline;
+}
+
