@@ -265,3 +265,20 @@ h3{margin:0; font-size:15px}
 @media (min-width: 980px){
   .stickyBar{max-width:980px; margin:0 auto; left:50%; transform:translateX(-50%); border-radius:18px 18px 0 0;}
 }
+
+/* spacing sections (photos, map) */
+.sectionSpace{
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+/* make hero right button a bit cleaner */
+.bigBook{
+  display:block;
+  text-align:center;
+}
+
+/* optional: slightly more breathing room below cards grid */
+.grid{
+  margin-bottom: 6px;
+}
