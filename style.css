@@ -360,3 +360,9 @@ h3{margin:0; font-size:15px}
   /* make buttons slightly tighter */
   .btn{padding:9px 10px}
 }
+
+.ico-img{
+  width:18px;
+  height:18px;
+  display:block;
+}
