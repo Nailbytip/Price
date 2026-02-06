@@ -27,7 +27,7 @@ body{
 .wrap{max-width:980px; margin:0 auto; padding:18px}
 a{color:inherit}
 
-/* Make the page layout a vertical stack with consistent spacing */
+/* Page layout spacing between blocks */
 main.wrap.page{
   display:flex;
   flex-direction:column;
@@ -49,6 +49,32 @@ main.wrap.page{
   flex-wrap:wrap;
 }
 
+/* Two-line mobile header: brand+lang on line1, cta on line2 */
+@media (max-width: 560px){
+  .header{
+    display:grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand lang"
+      "cta   cta";
+    gap:10px;
+  }
+  .brand{grid-area:brand}
+  .lang{grid-area:lang; justify-self:end}
+  .cta{grid-area:cta}
+
+  /* keep cta as one line with horizontal scroll if needed */
+  .cta{
+    flex-wrap:nowrap;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:2px;
+  }
+  .cta::-webkit-scrollbar{display:none}
+
+  .btn{padding:9px 10px}
+}
+
 .brand{display:flex; gap:12px; align-items:center}
 .mark{
   width:44px; height:44px; border-radius:16px;
@@ -58,6 +84,17 @@ main.wrap.page{
   box-shadow: 0 12px 30px rgba(0,0,0,.06);
   color:#111827;
 }
+
+/* If you use a logo instead of the icon */
+.mark-logo{padding:0}
+.mark-logo img{
+  width:44px;
+  height:44px;
+  border-radius:16px;
+  object-fit:cover;
+  display:block;
+}
+
 h1{font-size:18px; margin:0}
 .sub{margin:2px 0 0; color:var(--muted); font-size:12px}
 
@@ -67,6 +104,7 @@ h1{font-size:18px; margin:0}
   flex-wrap:wrap;
   align-items:center;
 }
+
 .ico{display:inline-grid; place-items:center}
 
 /* Buttons */
@@ -100,7 +138,6 @@ h1{font-size:18px; margin:0}
 .lang{min-width:62px; justify-content:center}
 
 /* Hero */
-.hero{margin-top:14px}
 .hero-card{
   border-radius: var(--radius);
   border: 1px solid rgba(229,231,235,.9);
@@ -122,6 +159,7 @@ h1{font-size:18px; margin:0}
 
 h2{margin:0 0 8px; font-size:18px}
 .muted{color:var(--muted)}
+
 .chips{
   display:flex;
   flex-wrap:wrap;
@@ -181,7 +219,6 @@ h2{margin:0 0 8px; font-size:18px}
   grid-template-columns: repeat(12, 1fr);
   gap:12px;
 }
-
 .card{
   grid-column: span 12;
   background: rgba(255,255,255,.78);
@@ -190,7 +227,6 @@ h2{margin:0 0 8px; font-size:18px}
   padding: 16px;
   box-shadow: var(--shadow);
 }
-
 @media (min-width: 820px){
   .card[data-cat]{grid-column: span 6}
 }
@@ -229,6 +265,13 @@ h3{margin:0; font-size:15px}
 }
 .link:hover{text-decoration:underline}
 
+.socialLinks{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.dot{color:var(--muted)}
+
 /* Photos gallery */
 .photos .gallery{
   margin-top:12px;
@@ -239,8 +282,15 @@ h3{margin:0; font-size:15px}
 @media (min-width: 820px){
   .photos .gallery{grid-template-columns: repeat(6, 1fr);}
 }
+
+/* Shot is a button */
 .shot{
+  appearance:none;
+  background:transparent;
+  padding:0;
+  border:none;
   display:block;
+  cursor:pointer;
   border-radius: 16px;
   overflow:hidden;
   border:1px solid rgba(229,231,235,.95);
@@ -266,22 +316,6 @@ h3{margin:0; font-size:15px}
 .reveal.in{
   opacity:1;
   transform: translateY(0);
-}
-
-/* Footer */
-.footer{
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding: 18px 0 30px;
-}
-
-/* Make .shot a button now */
-.shot{
-  appearance:none;
-  background: transparent;
-  padding:0;
-  cursor:pointer;
 }
 
 /* Lightbox */
@@ -327,10 +361,14 @@ h3{margin:0; font-size:15px}
 }
 .lightbox-close:hover{transform: translateY(-1px)}
 
+/* Footer */
+.footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding: 18px 0 30px;
+}
 
-.mark-logo{padding:0}
-.mark-logo img{
-  width:44px;
   height:44px;
   border-radius:16px;
   object-fit:cover;
