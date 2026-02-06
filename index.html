@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -8,154 +7,284 @@
   <meta name="description" content="Nail by Tip — Koh Chang nail studio price menu." />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <header class="topbar">
     <div class="wrap header">
       <div class="brand">
-        <div class="mark">✦</div>
+        <div class="mark" aria-hidden="true">
+          <!-- simple “sparkle” icon -->
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <path d="M12 2l1.2 5.2L18 8.5l-4.8 1.3L12 15l-1.2-5.2L6 8.5l4.8-1.3L12 2Z" stroke="currentColor" stroke-width="1.6" />
+            <path d="M19 14l.7 3 2.3.6-2.3.6-.7 3-.7-3-2.3-.6 2.3-.6.7-3Z" stroke="currentColor" stroke-width="1.4" opacity=".7"/>
+          </svg>
+        </div>
         <div>
           <h1>Nail by Tip</h1>
-          <p class="sub">Price menu • เมนูราคา</p>
+          <p class="sub" data-en="Price menu • Koh Chang" data-th="เมนูราคา • เกาะช้าง">Price menu • Koh Chang</p>
         </div>
       </div>
 
-```
-  <div class="cta">
-    <a class="btn btn-wa" href="https://wa.me/66917027652" target="_blank">WhatsApp</a>
-    <a class="btn btn-line" href="https://line.me/R/ti/p/~yuri.by.tip" target="_blank">LINE</a>
-    <a class="btn btn-map" href="https://maps.app.goo.gl/HysXzGgtAHdnfyDB9" target="_blank">Map</a>
-  </div>
-</div>
-```
+      <div class="cta">
+        <a class="btn btn-wa" id="waTop" href="#" target="_blank" rel="noreferrer" aria-label="Book on WhatsApp">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+              <path d="M7.5 20.5l.6-2.2a8.5 8.5 0 1 1 3.4 1l-2.3.5-1.7.7Z" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M10 8.8c.2-.4.4-.4.6-.4h.5c.2 0 .4 0 .5.3l.6 1.4c.1.2.1.4 0 .6l-.4.6c-.1.2-.1.4 0 .6.4.8 1.4 1.8 2.2 2.2.2.1.4.1.6 0l.6-.4c.2-.1.4-.1.6 0l1.4.6c.3.1.3.3.3.5v.5c0 .2 0 .4-.4.6-.5.3-1.2.6-1.9.5-1.5-.2-3.3-1.7-4.6-3.1-1.4-1.3-2.9-3.1-3.1-4.6-.1-.7.2-1.4.5-1.9Z" stroke="currentColor" stroke-width="1.2" opacity=".9"/>
+            </svg>
+          </span>
+          <span data-en="Book now" data-th="จองเลย">Book now</span>
+        </a>
 
+        <a class="btn btn-line" id="lineTop" href="#" target="_blank" rel="noreferrer" aria-label="Contact on LINE">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+              <path d="M12 3c5 0 9 3.3 9 7.4 0 4.2-4 7.5-9 7.5-.6 0-1.2 0-1.8-.1L7 20.6c-.3.2-.7-.1-.6-.5l.7-3.1C4.6 15.8 3 13.8 3 10.4 3 6.3 7 3 12 3Z" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M8 10.6h.01M12 10.6h.01M16 10.6h.01" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span>LINE</span>
+        </a>
+
+        <a class="btn btn-map" href="https://maps.app.goo.gl/HysXzGgtAHdnfyDB9" target="_blank" rel="noreferrer">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+              <path d="M12 21s7-5.1 7-12a7 7 0 1 0-14 0c0 6.9 7 12 7 12Z" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M12 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z" stroke="currentColor" stroke-width="1.6"/>
+            </svg>
+          </span>
+          <span data-en="Map" data-th="แผนที่">Map</span>
+        </a>
+
+        <button class="btn btn-ghost lang" id="langBtn" type="button" aria-label="Switch language">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+              <path d="M4 5h8M8 5v2c0 4-2 7-6 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M10 18c3-1.6 5.5-4.2 7-8m-2-3h5M16 7c0 6 2.7 10 6 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span id="langLabel">EN</span>
+        </button>
+      </div>
+    </div>
   </header>
 
   <main class="wrap">
+    <section class="hero reveal">
+      <div class="hero-card">
+        <div class="hero-left">
+          <h2 data-en="Clean nails, relaxed island vibe" data-th="เล็บสวย สะอาด ฟีลชิล ๆ เกาะช้าง">Clean nails, relaxed island vibe</h2>
+          <p class="muted" data-en="Best booking via WhatsApp or LINE • Payment: cash or bank scan"
+             data-th="แนะนำจองผ่าน WhatsApp หรือ LINE • ชำระเงินสดหรือสแกนโอน">
+            Best booking via WhatsApp or LINE • Payment: cash or bank scan
+          </p>
 
-```
-<section class="hero">
-  <div class="hero-card">
-    <div>
-      <h2>Clean nails, relaxed island vibe ✨</h2>
-      <p class="muted">
-        Best booking via WhatsApp or LINE • Payment: cash or bank scan
+          <div class="chips">
+            <span class="chip" id="updatedPill">Updated: —</span>
+            <span class="chip" data-en="⏱️ 45–90 min" data-th="⏱️ 45–90 นาที">⏱️ 45–90 min</span>
+            <span class="chip" data-en="Walk-in when available" data-th="รับลูกค้า walk-in ถ้าว่าง">Walk-in when available</span>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <a class="bigBook" id="waHero" href="#" target="_blank" rel="noreferrer">
+            <div class="bigBookTitle" data-en="Book now" data-th="จองเลย">Book now</div>
+            <div class="bigBookSub" data-en="WhatsApp preferred" data-th="แนะนำ WhatsApp">WhatsApp preferred</div>
+          </a>
+          <div class="miniNote" data-en="Send: date + time + service + nail photo (optional)."
+               data-th="ส่ง: วัน + เวลา + บริการ + รูปเล็บ (ถ้ามี)">
+            Send: date + time + service + nail photo (optional).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="toolbar reveal">
+      <button class="pill active" data-filter="all">All</button>
+      <button class="pill" data-filter="basic" data-en="Basic" data-th="พื้นฐาน">Basic</button>
+      <button class="pill" data-filter="gel" data-en="Gel" data-th="เจล">Gel</button>
+      <button class="pill" data-filter="ext" data-en="Extensions" data-th="ต่อเล็บ">Extensions</button>
+      <button class="pill" data-filter="foot" data-en="Foot care" data-th="ดูแลเท้า">Foot care</button>
+      <button class="pill" data-filter="design" data-en="Design" data-th="ลายเล็บ">Design</button>
+
+      <div class="spacer"></div>
+
+      <span class="tiny" id="priceNote"
+        data-en="Prices in THB • May vary by nail length/condition"
+        data-th="ราคาหน่วยบาท • อาจเปลี่ยนตามความยาว/สภาพเล็บ">
+        Prices in THB • May vary by nail length/condition
+      </span>
+    </section>
+
+    <section class="grid">
+      <article class="card reveal" data-cat="basic">
+        <div class="card-head">
+          <h3 data-en="Basic Services" data-th="บริการพื้นฐาน">Basic Services</h3>
+        </div>
+
+        <div class="row">
+          <span data-en="Nail polish" data-th="ทาสีเล็บ">Nail polish</span>
+          <span>250 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Manicure (electric tools)" data-th="ทำเล็บมือ (เครื่องไฟฟ้า)">Manicure (electric tools)</span>
+          <span>200+ THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Pedicure" data-th="ทำเล็บเท้า">Pedicure</span>
+          <span>200 THB</span>
+        </div>
+      </article>
+
+      <article class="card reveal" data-cat="gel">
+        <div class="card-head">
+          <h3 data-en="Gel Services" data-th="บริการเจล">Gel Services</h3>
+          <span class="badge" data-en="Most booked" data-th="คนจองบ่อย">Most booked</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Manicure + gel polish" data-th="ทำเล็บมือ + เจล">Manicure + gel polish</span>
+          <span>400 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Pedicure + gel polish" data-th="ทำเล็บเท้า + เจล">Pedicure + gel polish</span>
+          <span>400 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="French gel" data-th="เฟรนช์เจล">French gel</span>
+          <span>500 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Gel polish removal" data-th="ถอดเจล">Gel polish removal</span>
+          <span>100 THB</span>
+        </div>
+      </article>
+
+      <article class="card reveal" data-cat="ext">
+        <div class="card-head">
+          <h3 data-en="Extensions" data-th="ต่อเล็บ">Extensions</h3>
+        </div>
+
+        <div class="row">
+          <span data-en="Gel nail extensions (full set)" data-th="ต่อเล็บเจล (ทั้งชุด)">Gel nail extensions (full set)</span>
+          <span>1000 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Gel refill (natural look)" data-th="เติมโคนเจล (ลุคธรรมชาติ)">Gel refill (natural look)</span>
+          <span>700 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Remove gel extensions" data-th="ถอดเล็บต่อ">Remove gel extensions</span>
+          <span>200 THB</span>
+        </div>
+      </article>
+
+      <article class="card reveal" data-cat="foot">
+        <div class="card-head">
+          <h3 data-en="Foot Care" data-th="ดูแลเท้า">Foot Care</h3>
+        </div>
+
+        <div class="row">
+          <span data-en="Foot scrub" data-th="สครับเท้า">Foot scrub</span>
+          <span>300 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Foot massage" data-th="นวดเท้า">Foot massage</span>
+          <span>300 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Foot scrub + foot massage" data-th="สครับ + นวดเท้า">Foot scrub + foot massage</span>
+          <span>550 THB</span>
+        </div>
+      </article>
+
+      <article class="card reveal" data-cat="design">
+        <div class="card-head">
+          <h3 data-en="Design" data-th="ลายเล็บ">Design</h3>
+        </div>
+
+        <div class="row">
+          <span data-en="Custom design (set price, depends on complexity)" data-th="ลายตามแบบ (คิดเป็นชุด ขึ้นอยู่กับความยาก)">
+            Custom design (set price, depends on complexity)
+          </span>
+          <span>100–200 THB</span>
+        </div>
+
+        <p class="note"
+           data-en="Not per nail. Show a reference photo for accurate pricing."
+           data-th="ไม่คิดต่อเล็บ กรุณาโชว์รูปตัวอย่างเพื่อประเมินราคา">
+          Not per nail. Show a reference photo for accurate pricing.
+        </p>
+      </article>
+    </section>
+
+    <section class="card reveal photos" id="photos">
+      <div class="card-head">
+        <h3 data-en="Work photos" data-th="ผลงาน">Work photos</h3>
+        <a class="link" href="#top" data-en="Back to top" data-th="กลับขึ้นบน">Back to top</a>
+      </div>
+
+      <p class="muted" data-en="Tap to zoom. Add your own photos anytime (QR stays the same)."
+         data-th="แตะเพื่อดูรูปใหญ่ เพิ่มรูปได้ตลอด (QR เดิมใช้ได้)">
+        Tap to zoom. Add your own photos anytime (QR stays the same).
       </p>
-    </div>
-  </div>
-</section>
 
-<section class="grid">
+      <div class="gallery">
+        <!-- Replace these with your real photos in /photos -->
+        <a class="shot" href="photos/1.jpg"><img loading="lazy" src="photos/1.jpg" alt="Nail by Tip work 1"></a>
+        <a class="shot" href="photos/2.jpg"><img loading="lazy" src="photos/2.jpg" alt="Nail by Tip work 2"></a>
+        <a class="shot" href="photos/3.jpg"><img loading="lazy" src="photos/3.jpg" alt="Nail by Tip work 3"></a>
+        <a class="shot" href="photos/4.jpg"><img loading="lazy" src="photos/4.jpg" alt="Nail by Tip work 4"></a>
+        <a class="shot" href="photos/5.jpg"><img loading="lazy" src="photos/5.jpg" alt="Nail by Tip work 5"></a>
+        <a class="shot" href="photos/6.jpg"><img loading="lazy" src="photos/6.jpg" alt="Nail by Tip work 6"></a>
+      </div>
 
-  <article class="card">
-    <h3 data-en="Basic Services" data-th="บริการพื้นฐาน">Basic Services</h3>
+      <p class="note"
+         data-en="Tip: use square photos, 1200×1200 px, under 300 KB for fast loading."
+         data-th="แนะนำ: รูปสี่เหลี่ยม 1200×1200 px ขนาดไม่เกิน 300 KB โหลดเร็ว">
+        Tip: use square photos, 1200×1200 px, under 300 KB for fast loading.
+      </p>
+    </section>
 
-    <div class="row">
-      <span data-en="Nail polish" data-th="ทาสีเล็บ">Nail polish</span>
-      <span>250 THB</span>
-    </div>
+    <section class="card reveal" id="map">
+      <h3 data-en="Location" data-th="ที่ตั้ง">Location</h3>
+      <p class="muted" data-en="Open in Google Maps" data-th="เปิดใน Google Maps">Open in Google Maps</p>
+      <a class="btn btn-map" href="https://maps.app.goo.gl/HysXzGgtAHdnfyDB9" target="_blank" rel="noreferrer">
+        <span class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <path d="M12 21s7-5.1 7-12a7 7 0 1 0-14 0c0 6.9 7 12 7 12Z" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M12 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+        </span>
+        <span data-en="Get directions" data-th="นำทาง">Get directions</span>
+      </a>
+    </section>
 
-    <div class="row">
-      <span data-en="Manicure (electric tools)" data-th="ทำเล็บมือ (เครื่องไฟฟ้า)">Manicure (electric tools)</span>
-      <span>200+ THB</span>
-    </div>
-
-    <div class="row">
-      <span data-en="Pedicure" data-th="ทำเล็บเท้า">Pedicure</span>
-      <span>200 THB</span>
-    </div>
-
-  </article>
-
-  <article class="card">
-    <h3 data-en="Gel Services" data-th="บริการเจล">Gel Services</h3>
-
-    <div class="row">
-      <span data-en="Manicure + gel polish" data-th="ทำเล็บมือ + เจล">Manicure + gel polish</span>
-      <span>400 THB</span>
-    </div>
-
-    <div class="row">
-      <span data-en="Pedicure + gel polish" data-th="ทำเล็บเท้า + เจล">Pedicure + gel polish</span>
-      <span>400 THB</span>
-    </div>
-
-    <div class="row">
-      <span data-en="French gel" data-th="เฟรนช์เจล">French gel</span>
-      <span>500 THB</span>
-    </div>
-
-    <div class="row">
-      <span data-en="Gel polish removal" data-th="ถอดเจล">Gel polish removal</span>
-      <span>100 THB</span>
-    </div>
-
-  </article>
-
-  <article class="card">
-    <h3 data-en="Extensions" data-th="ต่อเล็บ">Extensions</h3>
-
-    <div class="row">
-      <span data-en="Gel nail extensions" data-th="ต่อเล็บเจล">Gel nail extensions</span>
-      <span>1000 THB</span>
-    </div>
-
-    <div class="row">
-      <span data-en="Gel refill (natural look)" data-th="เติมโคนเจล (ลุคธรรมชาติ)">Gel refill (natural look)</span>
-      <span>700 THB</span>
-    </div>
-
-    <div class="row">
-      <span data-en="Remove gel extensions" data-th="ถอดเล็บต่อ">Remove gel extensions</span>
-      <span>200 THB</span>
-    </div>
-
-  </article>
-
-  <article class="card">
-    <h3 data-en="Foot Care" data-th="ดูแลเท้า">Foot Care</h3>
-
-    <div class="row">
-      <span data-en="Foot scrub" data-th="สครับเท้า">Foot scrub</span>
-      <span>300 THB</span>
-    </div>
-
-    <div class="row">
-      <span data-en="Foot massage" data-th="นวดเท้า">Foot massage</span>
-      <span>300 THB</span>
-    </div>
-
-    <div class="row">
-      <span data-en="Foot scrub + massage" data-th="สครับ + นวดเท้า">Foot scrub + massage</span>
-      <span>550 THB</span>
-    </div>
-
-  </article>
-
-  <article class="card">
-    <h3 data-en="Design" data-th="ลายเล็บ">Design</h3>
-
-    <div class="row">
-      <span data-en="Custom nail design (depending on complexity)" data-th="ลายเล็บตามความยาก">Custom nail design (depending on complexity)</span>
-      <span>100–200 THB</span>
-    </div>
-
-    <p class="note" data-en="Price per design set, not per nail." data-th="คิดราคาต่อชุด ไม่ใช่ต่อเล็บ">Price per design set, not per nail.</p>
-
-  </article>
-
-</section>
-
-<footer class="footer">
-  <p>© <span id="year"></span> Nail by Tip • Koh Chang</p>
-</footer>
-```
-
+    <footer class="footer">
+      <p>© <span id="year"></span> Nail by Tip • Koh Chang</p>
+    </footer>
   </main>
 
-  <script src="script.js"></script>
-
-</body>
-</html>
+  <!-- sticky mobile bar -->
+  <nav class="stickyBar" aria-label="Quick actions">
+    <a class="stickyBtn primary" id="waSticky" href="#" target="_blank" rel="noreferrer">
+      <span class="stickyIco" aria-hidden="true">💬</span>
+      <span data-en="Book on WhatsApp" data-th="จองผ่าน WhatsApp">Book on WhatsApp</span>
+    </a>
+    <a class="stickyBtn" href="https://maps.app.goo.gl/HysXzGgtAHdnfyDB9" target="_blank" rel="noreferrer">
+      <span class="stickyIco" aria-hidden="true">📍</span>
+      <span data-en="Map" data-th="แผนที่">Map</span>
+    </a>
+  </nav>
 
   <script src="script.js"></script>
 </body>
