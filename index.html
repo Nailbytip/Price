@@ -8,25 +8,34 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-  <div class="lightbox-inner" role="dialog" aria-modal="true">
-    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">✕</button>
-    <img class="lightbox-img" id="lightboxImg" alt="Work photo zoomed">
-  </div>
-</div>
-  
 <body id="top">
   <header class="topbar">
     <div class="wrap header">
       <div class="brand">
-        <div class="mark mark-logo">
-  <img src="assets/logo.png" alt="Nail by Tip logo">
-</div>
+        <!-- OPTIONAL: replace this with your logo (see note at bottom) -->
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <path d="M12 2l1.2 5.2L18 8.5l-4.8 1.3L12 15l-1.2-5.2L6 8.5l4.8-1.3L12 2Z" stroke="currentColor" stroke-width="1.6" />
+            <path d="M19 14l.7 3 2.3.6-2.3.6-.7 3-.7-3-2.3-.6 2.3-.6.7-3Z" stroke="currentColor" stroke-width="1.4" opacity=".7"/>
+          </svg>
+        </div>
+
         <div>
           <h1>Nail by Tip</h1>
           <p class="sub" data-en="Price menu • Koh Chang" data-th="เมนูราคา • เกาะช้าง">Price menu • Koh Chang</p>
         </div>
       </div>
+
+      <!-- Language toggle stays top-right on mobile -->
+      <button class="btn btn-ghost lang" id="langBtn" type="button" aria-label="Switch language">
+        <span class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+            <path d="M4 5h8M8 5v2c0 4-2 7-6 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M10 18c3-1.6 5.5-4.2 7-8m-2-3h5M16 7c0 6 2.7 10 6 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span id="langLabel">EN</span>
+      </button>
 
       <div class="cta">
         <a class="btn btn-wa" id="waTop" href="#" target="_blank" rel="noreferrer" aria-label="WhatsApp">
@@ -59,15 +68,8 @@
           <span data-en="Map" data-th="แผนที่">Map</span>
         </a>
 
-        <button class="btn btn-ghost lang" id="langBtn" type="button" aria-label="Switch language">
-          <span class="ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-              <path d="M4 5h8M8 5v2c0 4-2 7-6 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              <path d="M10 18c3-1.6 5.5-4.2 7-8m-2-3h5M16 7c0 6 2.7 10 6 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span id="langLabel">EN</span>
-        </button>
+        <a class="btn btn-ghost" id="igTop" href="https://instagram.com/YOUR_INSTAGRAM" target="_blank" rel="noreferrer">IG</a>
+        <a class="btn btn-ghost" id="fbTop" href="https://facebook.com/YOUR_FACEBOOK" target="_blank" rel="noreferrer">FB</a>
       </div>
     </div>
   </header>
@@ -84,7 +86,6 @@
           </p>
 
           <div class="chips">
-            <span class="chip" id="updatedPill">Updated: —</span>
             <span class="chip" data-en="⏱️ 45–90 min" data-th="⏱️ 45–90 นาที">⏱️ 45–90 min</span>
             <span class="chip" data-en="Walk-in when available" data-th="รับลูกค้า walk-in ถ้าว่าง">Walk-in when available</span>
           </div>
@@ -134,18 +135,20 @@
           <h3 data-en="Gel Services" data-th="บริการเจล">Gel Services</h3>
           <span class="badge" data-en="Most booked" data-th="คนจองบ่อย">Most booked</span>
         </div>
+
         <div class="row"><span data-en="Manicure + gel polish" data-th="ทำเล็บมือ + เจล">Manicure + gel polish</span><span>400 THB</span></div>
         <div class="row"><span data-en="Pedicure + gel polish" data-th="ทำเล็บเท้า + เจล">Pedicure + gel polish</span><span>400 THB</span></div>
         <div class="row"><span data-en="French gel" data-th="เฟรนช์เจล">French gel</span><span>500 THB</span></div>
-        <div class="row">
-  <span data-en="Gel overlay on natural nails" data-th="เล็บเจลเสริมหน้าเล็บ">Gel overlay on natural nails</span>
-  <span>500 THB</span>
-</div>
 
-<div class="row">
-  <span data-en="Cat eye gel" data-th="เจลแคทอาย">Cat eye gel</span>
-  <span>500 THB</span>
-</div>
+        <div class="row">
+          <span data-en="Gel overlay on natural nails" data-th="เล็บเจลเสริมหน้าเล็บ">Gel overlay on natural nails</span>
+          <span>500 THB</span>
+        </div>
+
+        <div class="row">
+          <span data-en="Cat eye gel" data-th="เจลแคทอาย">Cat eye gel</span>
+          <span>500 THB</span>
+        </div>
 
         <div class="row"><span data-en="Gel polish removal" data-th="ถอดเจล">Gel polish removal</span><span>100 THB</span></div>
       </article>
@@ -174,9 +177,9 @@
           <span>100–200 THB</span>
         </div>
         <p class="note"
-           data-en="Show an example for accurate pricing."
-           data-th="กรุณาโชว์ตัวอย่างเพื่อประเมินราคา">
-          Show an example for accurate pricing.
+           data-en="Not per nail. Show an example for accurate pricing."
+           data-th="ไม่คิดต่อเล็บ กรุณาโชว์ตัวอย่างเพื่อประเมินราคา">
+          Not per nail. Show an example for accurate pricing.
         </p>
       </article>
     </section>
@@ -184,23 +187,21 @@
     <section class="card reveal photos" id="photos">
       <div class="card-head">
         <h3 data-en="Work photos" data-th="ผลงาน">Work photos</h3>
-        <a class="link" href="#top" data-en="Back to top" data-th="กลับขึ้นบน">Back to top</a>
+        <div class="socialLinks">
+          <a class="link" id="igLink" href="https://instagram.com/YOUR_INSTAGRAM" target="_blank" rel="noreferrer">Instagram</a>
+          <span class="dot">•</span>
+          <a class="link" id="fbLink" href="https://facebook.com/YOUR_FACEBOOK" target="_blank" rel="noreferrer">Facebook</a>
+        </div>
       </div>
 
-      <p class="muted"
-         data-en="<3"
-         data-th="<3">
-        >3.
-      </p>
-
       <div class="gallery">
-  <button class="shot" type="button" data-full="photos/1.jpg"><img loading="lazy" src="photos/1.jpg" alt="Nail by Tip work 1"></button>
-  <button class="shot" type="button" data-full="photos/2.jpg"><img loading="lazy" src="photos/2.jpg" alt="Nail by Tip work 2"></button>
-  <button class="shot" type="button" data-full="photos/3.jpg"><img loading="lazy" src="photos/3.jpg" alt="Nail by Tip work 3"></button>
-  <button class="shot" type="button" data-full="photos/4.jpg"><img loading="lazy" src="photos/4.jpg" alt="Nail by Tip work 4"></button>
-  <button class="shot" type="button" data-full="photos/5.jpg"><img loading="lazy" src="photos/5.jpg" alt="Nail by Tip work 5"></button>
-  <button class="shot" type="button" data-full="photos/6.jpg"><img loading="lazy" src="photos/6.jpg" alt="Nail by Tip work 6"></button>
-</div>
+        <button class="shot" type="button" data-full="photos/1.jpg"><img loading="lazy" src="photos/1.jpg" alt="Nail by Tip work 1"></button>
+        <button class="shot" type="button" data-full="photos/2.jpg"><img loading="lazy" src="photos/2.jpg" alt="Nail by Tip work 2"></button>
+        <button class="shot" type="button" data-full="photos/3.jpg"><img loading="lazy" src="photos/3.jpg" alt="Nail by Tip work 3"></button>
+        <button class="shot" type="button" data-full="photos/4.jpg"><img loading="lazy" src="photos/4.jpg" alt="Nail by Tip work 4"></button>
+        <button class="shot" type="button" data-full="photos/5.jpg"><img loading="lazy" src="photos/5.jpg" alt="Nail by Tip work 5"></button>
+        <button class="shot" type="button" data-full="photos/6.jpg"><img loading="lazy" src="photos/6.jpg" alt="Nail by Tip work 6"></button>
+      </div>
     </section>
 
     <section class="card reveal" id="map">
@@ -222,11 +223,15 @@
     </footer>
   </main>
 
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lightbox-inner" role="dialog" aria-modal="true">
+      <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">✕</button>
+      <img class="lightbox-img" id="lightboxImg" alt="Work photo zoomed">
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
 
-
-  <script src="script.js"></script>
-</body>
-</html>
