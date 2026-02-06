@@ -1,235 +1,108 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nail by Tip — Price Menu</title>
-  <meta name="description" content="Nail by Tip — Koh Chang nail studio price menu." />
-  <link rel="stylesheet" href="style.css" />
-</head>
+// ---- CONFIG (edit these) ----
+const WHATSAPP_PHONE_E164 = "66XXXXXXXXX"; // ex: 66981234567 (no +)
+const LINE_URL = "https://line.me/R/ti/p/~YOUR_LINE_ID";
+// -----------------------------
 
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-  <div class="lightbox-inner" role="dialog" aria-modal="true">
-    <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">✕</button>
-    <img class="lightbox-img" id="lightboxImg" alt="Work photo zoomed">
-  </div>
-</div>
+const qs = (s) => document.querySelector(s);
 
-<body id="top">
-  <header class="topbar">
-    <div class="wrap header">
-      <div class="brand">
-        <div class="mark mark-logo">
-  <img src="assets/logo.png" alt="Nail by Tip logo">
-</div>
-        <div>
-          <h1>Nail by Tip</h1>
-          <p class="sub" data-en="Price menu • Koh Chang" data-th="เมนูราคา • เกาะช้าง">Price menu • Koh Chang</p>
-        </div>
-      </div>
+function safeSetText(id, text){
+  const el = qs(id);
+  if (el) el.textContent = text;
+}
 
-      <div class="cta">
-        <a class="btn btn-wa" id="waTop" href="#" target="_blank" rel="noreferrer" aria-label="WhatsApp">
-          <span class="ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-              <path d="M7.4 20.4l.8-2.8a8.4 8.4 0 1 1 3.2 1.1l-3.4.7-.6 1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
-              <path d="M10.2 9.2c.2-.4.4-.4.7-.4h.4c.2 0 .4.1.5.3l.7 1.6c.1.2.1.4 0 .6l-.4.6c-.1.2-.1.4 0 .6.4.8 1.5 1.9 2.3 2.3.2.1.4.1.6 0l.6-.4c.2-.1.4-.1.6 0l1.6.7c.2.1.3.3.3.5v.4c0 .3 0 .5-.4.7-.5.3-1.2.6-2 .5-1.6-.2-3.5-1.8-4.9-3.2-1.4-1.4-3-3.3-3.2-4.9-.1-.8.2-1.5.5-2Z" stroke="currentColor" stroke-width="1.2" opacity=".9"/>
-            </svg>
-          </span>
-          <span>WhatsApp</span>
-        </a>
+function safeSetHref(id, href){
+  const el = qs(id);
+  if (el) el.href = href;
+}
 
-        <a class="btn btn-line" id="lineTop" href="#" target="_blank" rel="noreferrer" aria-label="LINE">
-          <span class="ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-              <path d="M12 3c5 0 9 3.3 9 7.4 0 4.2-4 7.5-9 7.5-.6 0-1.2 0-1.8-.1L7 20.6c-.3.2-.7-.1-.6-.5l.7-3.1C4.6 15.8 3 13.8 3 10.4 3 6.3 7 3 12 3Z" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M8 10.6h.01M12 10.6h.01M16 10.6h.01" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span>LINE</span>
-        </a>
+// Year + Updated
+safeSetText("#year", new Date().getFullYear());
+const updated = new Date().toLocaleDateString(undefined, { year:"numeric", month:"short", day:"numeric" });
+safeSetText("#updatedPill", `Updated: ${updated}`);
 
-        <a class="btn btn-map" href="https://maps.app.goo.gl/HysXzGgtAHdnfyDB9" target="_blank" rel="noreferrer">
-          <span class="ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-              <path d="M12 21s7-5.1 7-12a7 7 0 1 0-14 0c0 6.9 7 12 7 12Z" stroke="currentColor" stroke-width="1.6"/>
-              <path d="M12 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z" stroke="currentColor" stroke-width="1.6"/>
-            </svg>
-          </span>
-          <span data-en="Map" data-th="แผนที่">Map</span>
-        </a>
+// WhatsApp links (prefill)
+const waBase = `https://wa.me/${WHATSAPP_PHONE_E164}`;
+const waMsgEN = encodeURIComponent("Hi Nail by Tip! I’d like to book. Date/time: __ / Service: __ / (Optional) design example photo");
+const waMsgTH = encodeURIComponent("สวัสดีค่ะ Nail by Tip ขอจองคิวค่ะ วัน/เวลา: __ / บริการ: __ / (ถ้ามี) รูปตัวอย่างลาย/แบบ");
 
-        <button class="btn btn-ghost lang" id="langBtn" type="button" aria-label="Switch language">
-          <span class="ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-              <path d="M4 5h8M8 5v2c0 4-2 7-6 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              <path d="M10 18c3-1.6 5.5-4.2 7-8m-2-3h5M16 7c0 6 2.7 10 6 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span id="langLabel">EN</span>
-        </button>
-      </div>
-    </div>
-  </header>
+function setWhatsAppLinks(msg){
+  const url = `${waBase}?text=${msg}`;
+  safeSetHref("#waTop", url);
+  safeSetHref("#waHero", url);
+}
 
-  <main class="wrap page">
-    <section class="hero reveal">
-      <div class="hero-card">
-        <div class="hero-left">
-          <h2 data-en="Clean nails, relaxed island vibe" data-th="เล็บสวย สะอาด ฟีลชิล ๆ เกาะช้าง">Clean nails, relaxed island vibe</h2>
-          <p class="muted"
-             data-en="Best booking via WhatsApp or LINE • Payment: cash or bank scan"
-             data-th="แนะนำจองผ่าน WhatsApp หรือ LINE • ชำระเงินสดหรือสแกนโอน">
-            Best booking via WhatsApp or LINE • Payment: cash or bank scan
-          </p>
+// LINE
+safeSetHref("#lineTop", LINE_URL);
 
-          <div class="chips">
-            <span class="chip" id="updatedPill">Updated: —</span>
-            <span class="chip" data-en="⏱️ 45–90 min" data-th="⏱️ 45–90 นาที">⏱️ 45–90 min</span>
-            <span class="chip" data-en="Walk-in when available" data-th="รับลูกค้า walk-in ถ้าว่าง">Walk-in when available</span>
-          </div>
-        </div>
+// Language toggle (default auto)
+let lang = (navigator.language || "en").toLowerCase().startsWith("th") ? "th" : "en";
 
-        <div class="hero-right">
-          <a class="bigBook" id="waHero" href="#" target="_blank" rel="noreferrer">
-            <div class="bigBookTitle" data-en="Book now" data-th="จองเลย">Book now</div>
-          </a>
+function applyLang(){
+  document.querySelectorAll("[data-en]").forEach(el => {
+    el.textContent = (lang === "th") ? el.getAttribute("data-th") : el.getAttribute("data-en");
+  });
+  safeSetText("#langLabel", (lang === "th") ? "TH" : "EN");
+  setWhatsAppLinks(lang === "th" ? waMsgTH : waMsgEN);
+}
+applyLang();
 
-          <div class="miniNote"
-               data-en="Send: date + time + service + (optional) design example photo."
-               data-th="ส่ง: วัน + เวลา + บริการ + (ถ้ามี) รูปตัวอย่างลาย/แบบ">
-            Send: date + time + service + (optional) design example photo.
-          </div>
-        </div>
-      </div>
-    </section>
+// Button click (force toggle)
+const langBtn = qs("#langBtn");
+if (langBtn){
+  langBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    lang = (lang === "en") ? "th" : "en";
+    applyLang();
+  });
+}
 
-    <section class="toolbar reveal">
-      <button class="pill active" data-filter="all">All</button>
-      <button class="pill" data-filter="basic" data-en="Basic" data-th="พื้นฐาน">Basic</button>
-      <button class="pill" data-filter="gel" data-en="Gel" data-th="เจล">Gel</button>
-      <button class="pill" data-filter="ext" data-en="Extensions" data-th="ต่อเล็บ">Extensions</button>
-      <button class="pill" data-filter="foot" data-en="Foot care" data-th="ดูแลเท้า">Foot care</button>
-      <button class="pill" data-filter="design" data-en="Design" data-th="ลายเล็บ">Design</button>
+// Category filter
+const pills = Array.from(document.querySelectorAll(".pill[data-filter]"));
+const cards = Array.from(document.querySelectorAll(".card[data-cat]"));
 
-      <div class="spacer"></div>
+pills.forEach(p => {
+  p.addEventListener("click", () => {
+    pills.forEach(x => x.classList.remove("active"));
+    p.classList.add("active");
 
-      <span class="tiny"
-        data-en="Prices in THB • May vary by nail length/condition"
-        data-th="ราคาหน่วยบาท • อาจเปลี่ยนตามความยาว/สภาพเล็บ">
-        Prices in THB • May vary by nail length/condition
-      </span>
-    </section>
+    const filter = p.getAttribute("data-filter");
+    cards.forEach(c => {
+      c.style.display = (filter === "all" || c.getAttribute("data-cat") === filter) ? "" : "none";
+    });
+  });
+});
 
-    <section class="grid">
-      <article class="card reveal" data-cat="basic">
-        <div class="card-head"><h3 data-en="Basic Services" data-th="บริการพื้นฐาน">Basic Services</h3></div>
-        <div class="row"><span data-en="Nail polish" data-th="ทาสีเล็บ">Nail polish</span><span>250 THB</span></div>
-        <div class="row"><span data-en="Manicure (electric tools)" data-th="ทำเล็บมือ (เครื่องไฟฟ้า)">Manicure (electric tools)</span><span>200+ THB</span></div>
-        <div class="row"><span data-en="Pedicure" data-th="ทำเล็บเท้า">Pedicure</span><span>200 THB</span></div>
-      </article>
+// Reveal animation
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); });
+}, { threshold: 0.12 });
 
-      <article class="card reveal" data-cat="gel">
-        <div class="card-head">
-          <h3 data-en="Gel Services" data-th="บริการเจล">Gel Services</h3>
-          <span class="badge" data-en="Most booked" data-th="คนจองบ่อย">Most booked</span>
-        </div>
-        <div class="row"><span data-en="Manicure + gel polish" data-th="ทำเล็บมือ + เจล">Manicure + gel polish</span><span>400 THB</span></div>
-        <div class="row"><span data-en="Pedicure + gel polish" data-th="ทำเล็บเท้า + เจล">Pedicure + gel polish</span><span>400 THB</span></div>
-        <div class="row"><span data-en="French gel" data-th="เฟรนช์เจล">French gel</span><span>500 THB</span></div>
-        <div class="row">
-  <span data-en="Gel overlay on natural nails" data-th="เล็บเจลเสริมหน้าเล็บ">Gel overlay on natural nails</span>
-  <span>500 THB</span>
-</div>
+document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
 
-<div class="row">
-  <span data-en="Cat eye gel" data-th="เจลแคทอาย">Cat eye gel</span>
-  <span>500 THB</span>
-</div>
+// Lightbox for photos
+const lb = document.getElementById("lightbox");
+const lbImg = document.getElementById("lightboxImg");
+const lbClose = document.getElementById("lightboxClose");
 
-        <div class="row"><span data-en="Gel polish removal" data-th="ถอดเจล">Gel polish removal</span><span>100 THB</span></div>
-      </article>
+function openLightbox(src){
+  if (!lb || !lbImg) return;
+  lbImg.src = src;
+  lb.classList.add("open");
+  lb.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+function closeLightbox(){
+  if (!lb) return;
+  lb.classList.remove("open");
+  lb.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  if (lbImg) lbImg.src = "";
+}
 
-      <article class="card reveal" data-cat="ext">
-        <div class="card-head"><h3 data-en="Extensions" data-th="ต่อเล็บ">Extensions</h3></div>
-        <div class="row"><span data-en="Gel nail extensions (full set)" data-th="ต่อเล็บเจล (ทั้งชุด)">Gel nail extensions (full set)</span><span>1000 THB</span></div>
-        <div class="row"><span data-en="Gel refill (natural look)" data-th="เติมโคนเจล (ลุคธรรมชาติ)">Gel refill (natural look)</span><span>700 THB</span></div>
-        <div class="row"><span data-en="Remove gel extensions" data-th="ถอดเล็บต่อ">Remove gel extensions</span><span>200 THB</span></div>
-      </article>
+document.querySelectorAll(".shot[data-full]").forEach(btn => {
+  btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-full")));
+});
 
-      <article class="card reveal" data-cat="foot">
-        <div class="card-head"><h3 data-en="Foot Care" data-th="ดูแลเท้า">Foot Care</h3></div>
-        <div class="row"><span data-en="Foot scrub" data-th="สครับเท้า">Foot scrub</span><span>300 THB</span></div>
-        <div class="row"><span data-en="Foot massage" data-th="นวดเท้า">Foot massage</span><span>300 THB</span></div>
-        <div class="row"><span data-en="Foot scrub + foot massage" data-th="สครับ + นวดเท้า">Foot scrub + foot massage</span><span>550 THB</span></div>
-      </article>
-
-      <article class="card reveal" data-cat="design">
-        <div class="card-head"><h3 data-en="Design" data-th="ลายเล็บ">Design</h3></div>
-        <div class="row">
-          <span data-en="Custom design (set price, depends on complexity)"
-                data-th="ลายตามแบบ (คิดเป็นชุด ขึ้นอยู่กับความยาก)">
-            Custom design (set price, depends on complexity)
-          </span>
-          <span>100–200 THB</span>
-        </div>
-        <p class="note"
-           data-en="Not per nail. Show an example for accurate pricing."
-           data-th="ไม่คิดต่อเล็บ กรุณาโชว์ตัวอย่างเพื่อประเมินราคา">
-          Not per nail. Show an example for accurate pricing.
-           data-en="Show an example for accurate pricing."
-           data-th="กรุณาโชว์ตัวอย่างเพื่อประเมินราคา">
-          Show an example for accurate pricing.
-        </p>
-      </article>
-    </section>
-
-    <section class="card reveal photos" id="photos">
-      <div class="card-head">
-        <h3 data-en="Work photos" data-th="ผลงาน">Work photos</h3>
-        <a class="link" href="#top" data-en="Back to top" data-th="กลับขึ้นบน">Back to top</a>
-      </div>
-
-      <p class="muted"
-         data-en="<3"
-         data-th="<3">
-        >3.
-      </p>
-
-      <div class="gallery">
-  <button class="shot" type="button" data-full="photos/1.jpg"><img loading="lazy" src="photos/1.jpg" alt="Nail by Tip work 1"></button>
-  <button class="shot" type="button" data-full="photos/2.jpg"><img loading="lazy" src="photos/2.jpg" alt="Nail by Tip work 2"></button>
-  <button class="shot" type="button" data-full="photos/3.jpg"><img loading="lazy" src="photos/3.jpg" alt="Nail by Tip work 3"></button>
-  <button class="shot" type="button" data-full="photos/4.jpg"><img loading="lazy" src="photos/4.jpg" alt="Nail by Tip work 4"></button>
-  <button class="shot" type="button" data-full="photos/5.jpg"><img loading="lazy" src="photos/5.jpg" alt="Nail by Tip work 5"></button>
-  <button class="shot" type="button" data-full="photos/6.jpg"><img loading="lazy" src="photos/6.jpg" alt="Nail by Tip work 6"></button>
-</div>
-    </section>
-
-    <section class="card reveal" id="map">
-      <h3 data-en="Location" data-th="ที่ตั้ง">Location</h3>
-      <p class="muted" data-en="Open in Google Maps" data-th="เปิดใน Google Maps">Open in Google Maps</p>
-      <a class="btn btn-map" href="https://maps.app.goo.gl/HysXzGgtAHdnfyDB9" target="_blank" rel="noreferrer">
-        <span class="ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-            <path d="M12 21s7-5.1 7-12a7 7 0 1 0-14 0c0 6.9 7 12 7 12Z" stroke="currentColor" stroke-width="1.6"/>
-            <path d="M12 12.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4Z" stroke="currentColor" stroke-width="1.6"/>
-          </svg>
-        </span>
-        <span data-en="Get directions" data-th="นำทาง">Get directions</span>
-      </a>
-    </section>
-
-    <footer class="footer">
-      <p>© <span id="year"></span> Nail by Tip • Koh Chang</p>
-    </footer>
-  </main>
-
-  <script src="script.js"></script>
-</body>
-</html>
-
-
-  <script src="script.js"></script>
-</body>
-</html>
+if (lbClose) lbClose.addEventListener("click", closeLightbox);
+if (lb) lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
