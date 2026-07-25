@@ -1,5 +1,5 @@
 // ---- CONFIG (edit these) ----
-const WHATSAPP_PHONE_E164 = "66XXXXXXXXX"; // ex: 66981234567 (no +)
+const WHATSAPP_PHONE_E164 = "66917027652"; // -
 const LINE_URL = "https://line.me/R/ti/p/~YOUR_LINE_ID";
 // -----------------------------
 
