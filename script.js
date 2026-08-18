@@ -1,95 +1,215 @@
-// ---- CONFIG (edit these) ----
-const WHATSAPP_PHONE_E164 = "66917027652"; // -
-const LINE_URL = "https://line.me/R/ti/p/~YOUR_LINE_ID";
-// -----------------------------
+/* =====================================================================
+   Nail by Tip — price menu
+   ---------------------------------------------------------------------
+   CONFIG — the only lines you normally need to touch
+   ===================================================================== */
+const WHATSAPP_PHONE_E164 = "66917027652";  // international format, no "+"
+const LINE_URL            = "";             // e.g. "https://line.me/R/ti/p/~yourlineid"
+                                            // leave "" and the LINE buttons are removed
+const PHOTO_COUNT         = 20;             // number of files in /photos (1.jpg … N.jpg)
+const PHOTOS_SHOWN        = 6;              // how many to show at random
+/* ===================================================================== */
 
 const qs = (s) => document.querySelector(s);
+const qsa = (s) => Array.from(document.querySelectorAll(s));
 
-function safeSetText(id, text){
-  const el = qs(id);
-  if (el) el.textContent = text;
+/* ---------- Copy that JS builds at runtime (EN / TH) ---------- */
+const COPY = {
+  en: {
+    waPlain: "Hi Nail by Tip! I'd like to book. Date/time: __ / Service: __ / (optional) design example photo",
+    waIntro: "Hi Nail by Tip! I'd like to book:",
+    waOutro: "Date/time: __",
+    bookDefault: "Book on WhatsApp",
+    bookN: (n) => (n === 1 ? "Book 1 service" : `Book ${n} services`),
+    selectedN: (n) => (n === 1 ? "1 service selected" : `${n} services selected`)
+  },
+  th: {
+    waPlain: "สวัสดีค่ะ Nail by Tip ขอจองคิวค่ะ วัน/เวลา: __ / บริการ: __ / (ถ้ามี) รูปตัวอย่างลาย",
+    waIntro: "สวัสดีค่ะ Nail by Tip ขอจองคิวค่ะ",
+    waOutro: "วัน/เวลา: __",
+    bookDefault: "จองผ่าน WhatsApp",
+    bookN: (n) => `จอง ${n} บริการ`,
+    selectedN: (n) => `เลือก ${n} บริการ`
+  }
+};
+
+/* ---------- Footer year ---------- */
+const yearEl = qs("#year");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+/* ---------- LINE: wire it up, or remove the dead buttons ---------- */
+qsa(".js-line").forEach((el) => {
+  if (LINE_URL) el.href = LINE_URL;
+  else el.remove();
+});
+
+/* ---------- Service selection ---------- */
+const selected = new Set();
+const rows = qsa(".row");
+
+rows.forEach((row) => {
+  row.addEventListener("click", () => {
+    const on = row.getAttribute("aria-pressed") === "true";
+    row.setAttribute("aria-pressed", on ? "false" : "true");
+    if (on) selected.delete(row);
+    else selected.add(row);
+    updateBooking();
+  });
+});
+
+const clearBtn = qs("#clearSel");
+if (clearBtn) {
+  clearBtn.addEventListener("click", () => {
+    selected.forEach((r) => r.setAttribute("aria-pressed", "false"));
+    selected.clear();
+    updateBooking();
+  });
 }
 
-function safeSetHref(id, href){
-  const el = qs(id);
-  if (el) el.href = href;
+function serviceLine(row) {
+  const name = row.querySelector(".row-name");
+  const price = row.querySelector(".row-price");
+  return `• ${name ? name.textContent.trim() : ""} — ${price ? price.textContent.trim() : ""}`;
 }
 
-// Year + Updated
-safeSetText("#year", new Date().getFullYear());
-
-// WhatsApp links (prefill)
-const waBase = `https://wa.me/${WHATSAPP_PHONE_E164}`;
-const waMsgEN = encodeURIComponent("Hi Nail by Tip! I’d like to book. Date/time: __ / Service: __ / (Optional) design example photo");
-const waMsgTH = encodeURIComponent("สวัสดีค่ะ Nail by Tip ขอจองคิวค่ะ วัน/เวลา: __ / บริการ: __ / (ถ้ามี) รูปตัวอย่างลาย/แบบ");
-
-function setWhatsAppLinks(msg){
-  const url = `${waBase}?text=${msg}`;
-  safeSetHref("#waTop", url);
-  safeSetHref("#waHero", url);
+function buildMessage() {
+  const t = COPY[lang];
+  if (!selected.size) return t.waPlain;
+  // keep the menu order, not the click order
+  const lines = rows.filter((r) => selected.has(r)).map(serviceLine);
+  return [t.waIntro, ...lines, "", t.waOutro].join("\n");
 }
 
-// LINE
-safeSetHref("#lineTop", LINE_URL);
+function updateBooking() {
+  const t = COPY[lang];
+  const n = selected.size;
 
-// Language toggle (default auto)
+  const url = `https://wa.me/${WHATSAPP_PHONE_E164}?text=${encodeURIComponent(buildMessage())}`;
+  ["#waTop", "#waHero", "#waBar"].forEach((id) => {
+    const el = qs(id);
+    if (el) el.href = url;
+  });
+
+  const label = n === 0 ? t.bookDefault : t.bookN(n);
+  qsa("#waBarLabel, .bigBookTitle").forEach((el) => (el.textContent = label));
+
+  const strip = qs("#selstrip");
+  const count = qs("#selCount");
+  if (strip) strip.hidden = n === 0;
+  if (count) count.textContent = t.selectedN(n);
+}
+
+/* ---------- Language ---------- */
 let lang = (navigator.language || "en").toLowerCase().startsWith("th") ? "th" : "en";
 
-function applyLang(){
-  document.querySelectorAll("[data-en]").forEach(el => {
-    el.textContent = (lang === "th") ? el.getAttribute("data-th") : el.getAttribute("data-en");
+function applyLang() {
+  qsa("[data-en]").forEach((el) => {
+    const v = el.getAttribute(lang === "th" ? "data-th" : "data-en");
+    if (v !== null) el.textContent = v;
   });
-  safeSetText("#langLabel", (lang === "th") ? "TH" : "EN");
-  setWhatsAppLinks(lang === "th" ? waMsgTH : waMsgEN);
+  const label = qs("#langLabel");
+  if (label) label.textContent = lang === "th" ? "TH" : "EN";
+  document.documentElement.lang = lang;
+  updateBooking(); // must run last: it overrides the booking labels
 }
-applyLang();
 
-// Button click (force toggle)
 const langBtn = qs("#langBtn");
-if (langBtn){
+if (langBtn) {
   langBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    lang = (lang === "en") ? "th" : "en";
+    lang = lang === "en" ? "th" : "en";
     applyLang();
   });
 }
 
-// Category filter
-const pills = Array.from(document.querySelectorAll(".pill[data-filter]"));
-const cards = Array.from(document.querySelectorAll(".card[data-cat]"));
+applyLang();
 
-pills.forEach(p => {
-  p.addEventListener("click", () => {
-    pills.forEach(x => x.classList.remove("active"));
-    p.classList.add("active");
+/* ---------- Sticky offsets + category nav scroll-spy ---------- */
+const topbar = qs("#topbar");
+const catnav = qs("#catnav");
+const scroller = qs(".catnav-inner");
+const navLinks = qsa("#catnav .pill");
+const catCards = qsa(".card[data-cat]");
+let stickH = 110;
 
-    const filter = p.getAttribute("data-filter");
-    cards.forEach(c => {
-      c.style.display = (filter === "all" || c.getAttribute("data-cat") === filter) ? "" : "none";
-    });
+function measure() {
+  const th = topbar ? topbar.offsetHeight : 0;
+  const nh = catnav ? catnav.offsetHeight : 0;
+  stickH = th + nh;
+  const root = document.documentElement.style;
+  root.setProperty("--topbar-h", th + "px");
+  root.setProperty("--stick-h", stickH + "px");
+}
+
+let lastActive = null;
+
+function updateSpy() {
+  if (!catCards.length) return;
+  const line = stickH + 20;
+  let active = catCards[0];
+  for (const c of catCards) {
+    if (c.getBoundingClientRect().top <= line) active = c;
+  }
+  if (active === lastActive) return;
+  lastActive = active;
+
+  navLinks.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === "#" + active.id));
+
+  // keep the active pill visible in the horizontal scroller
+  const on = navLinks.find((a) => a.classList.contains("active"));
+  if (scroller && on) {
+    const left = on.offsetLeft - (scroller.clientWidth - on.offsetWidth) / 2;
+    scroller.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+  }
+}
+
+let ticking = false;
+function onScroll() {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => {
+    ticking = false;
+    updateSpy();
   });
+}
+
+measure();
+updateSpy();
+window.addEventListener("scroll", onScroll, { passive: true });
+window.addEventListener("resize", () => {
+  measure();
+  lastActive = null;
+  updateSpy();
 });
+window.addEventListener("load", measure);
 
-// Reveal animation
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); });
-}, { threshold: 0.12 });
+/* ---------- Reveal on scroll ---------- */
+const obs = new IntersectionObserver(
+  (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in"); }),
+  { threshold: 0.12 }
+);
+qsa(".reveal").forEach((el) => obs.observe(el));
 
-document.querySelectorAll(".reveal").forEach(el => obs.observe(el));
+// Last resort: if the observer never reports anything, drop the effect
+// rather than leaving the page blank.
+setTimeout(() => {
+  if (!qs(".reveal.in")) document.documentElement.classList.remove("js");
+}, 800);
 
-// Lightbox for photos
-const lb = document.getElementById("lightbox");
-const lbImg = document.getElementById("lightboxImg");
-const lbClose = document.getElementById("lightboxClose");
+/* ---------- Lightbox ---------- */
+const lb = qs("#lightbox");
+const lbImg = qs("#lightboxImg");
+const lbClose = qs("#lightboxClose");
 
-function openLightbox(src){
+function openLightbox(src) {
   if (!lb || !lbImg) return;
   lbImg.src = src;
   lb.classList.add("open");
   lb.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
 }
-function closeLightbox(){
+
+function closeLightbox() {
   if (!lb) return;
   lb.classList.remove("open");
   lb.setAttribute("aria-hidden", "true");
@@ -97,57 +217,33 @@ function closeLightbox(){
   if (lbImg) lbImg.src = "";
 }
 
-document.querySelectorAll(".shot[data-full]").forEach(btn => {
-  btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-full")));
-});
-
 if (lbClose) lbClose.addEventListener("click", closeLightbox);
 if (lb) lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
 
-// --- Random gallery (6 photos out of 19) ---
-(function randomGallery(){
-  const gallery = document.getElementById("gallery");
+/* ---------- Random gallery ---------- */
+(function randomGallery() {
+  const gallery = qs("#gallery");
   if (!gallery) return;
 
-  const TOTAL = 19;      // how many photos in /photos
-  const SHOW = 6;        // how many to display
-
-  // Build list [1..TOTAL]
-  const all = Array.from({ length: TOTAL }, (_, i) => i + 1);
-
-  // Shuffle (Fisher-Yates)
+  const all = Array.from({ length: PHOTO_COUNT }, (_, i) => i + 1);
   for (let i = all.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [all[i], all[j]] = [all[j], all[i]];
   }
 
-  const pick = all.slice(0, SHOW);
+  gallery.innerHTML = all
+    .slice(0, PHOTOS_SHOWN)
+    .map(
+      (n) => `
+      <button class="shot" type="button" data-full="photos/${n}.jpg">
+        <img loading="lazy" decoding="async" width="400" height="400"
+             src="photos/${n}.jpg" alt="Nail by Tip work ${n}">
+      </button>`
+    )
+    .join("");
 
-  // Cache-bust param so refresh shows a different mix even with aggressive caching
-  const bust = Date.now();
-
-  gallery.innerHTML = pick.map(n => {
-    const src = `photos/${n}.jpg?v=${bust}`;
-    return `
-      <button class="shot" type="button" data-full="photos/${n}.jpg?v=${bust}">
-        <img loading="lazy" src="${src}" alt="Nail by Tip work ${n}">
-      </button>
-    `;
-  }).join("");
-
-  // Hook into your existing lightbox (if present)
-  const lb = document.getElementById("lightbox");
-  const lbImg = document.getElementById("lightboxImg");
-  const openLightbox = (src) => {
-    if (!lb || !lbImg) return;
-    lbImg.src = src;
-    lb.classList.add("open");
-    lb.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  };
-
-  document.querySelectorAll("#gallery .shot[data-full]").forEach(btn => {
-    btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-full")));
-  });
+  qsa("#gallery .shot").forEach((btn) =>
+    btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-full")))
+  );
 })();
