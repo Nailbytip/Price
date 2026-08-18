@@ -94,9 +94,11 @@
              data-th="เดินเข้ามาได้เลย หรือจองล่วงหน้าทาง WhatsApp">Walk in, or book ahead on WhatsApp.</p>
 
           <div class="chips">
-            <span class="chip" data-en="⏱️ 45–90 min" data-th="⏱️ 45–90 นาที">⏱️ 45–90 min</span>
+            <!-- filled by script.js with the live open/closed status (Bangkok time) -->
+            <span class="chip chip-status" id="statusChip" hidden></span>
+            <span class="chip" data-en="🕙 Daily 10:00 – 22:00" data-th="🕙 ทุกวัน 10:00 – 22:00">🕙 Daily 10:00 – 22:00</span>
             <span class="chip" data-en="💵 Cash or bank scan" data-th="💵 เงินสดหรือสแกนโอน">💵 Cash or bank scan</span>
-            <span class="chip" data-en="🚶 Walk-in when available" data-th="🚶 รับ walk-in ถ้าว่าง">🚶 Walk-in when available</span>
+            <span class="chip" data-en="🚶 Walk-in · 45–90 min" data-th="🚶 รับ walk-in · 45–90 นาที">🚶 Walk-in · 45–90 min</span>
           </div>
         </div>
 
@@ -269,6 +271,8 @@
       </p>
 
       <div class="gallery" id="gallery"></div>
+      <button class="btn btn-more" id="galleryMore" type="button"
+              data-en="Show all photos" data-th="ดูรูปทั้งหมด">Show all photos</button>
     </section>
 
     <section class="card reveal" id="map">
@@ -322,8 +326,11 @@
 
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <div class="lightbox-inner" role="dialog" aria-modal="true">
+      <img class="lightbox-img" id="lightboxImg" alt="Nail by Tip work photo">
       <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Close">✕</button>
-      <img class="lightbox-img" id="lightboxImg" alt="Work photo zoomed">
+      <button class="lightbox-nav prev" id="lightboxPrev" type="button" aria-label="Previous photo">‹</button>
+      <button class="lightbox-nav next" id="lightboxNext" type="button" aria-label="Next photo">›</button>
+      <span class="lightbox-count" id="lightboxCount"></span>
     </div>
   </div>
 

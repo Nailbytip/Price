@@ -153,6 +153,25 @@ h2{margin:0 0 8px; font-size:19px; line-height:1.3}
   background:#fff;
   font-weight:600;
 }
+.chip[hidden]{display:none}
+
+/* live open/closed status */
+.chip-status{font-weight:800}
+.chip-status[data-state="open"]{
+  border-color: rgba(34,197,94,.45);
+  background: rgba(34,197,94,.10);
+  color:#166534;
+}
+.chip-status[data-state="soon"]{
+  border-color: rgba(245,158,11,.5);
+  background: rgba(245,158,11,.13);
+  color:#92400e;
+}
+.chip-status[data-state="closed"]{
+  border-color: rgba(239,68,68,.4);
+  background: rgba(239,68,68,.09);
+  color:#991b1b;
+}
 
 .bigBook{
   text-decoration:none;
@@ -352,6 +371,14 @@ h3{margin:0; font-size:15px; font-weight:900}
   display:block;
 }
 
+.btn-more{
+  display:flex;
+  justify-content:center;
+  margin:12px auto 0;
+  border-color: rgba(255,79,163,.4);
+}
+.btn-more[hidden]{display:none}
+
 .insta-line{margin: 6px 0 10px}
 .insta-link{
   display:inline-flex;
@@ -479,14 +506,22 @@ h3{margin:0; font-size:15px; font-weight:900}
 .lightbox.open{display:flex}
 .lightbox-inner{
   position: relative;
-  width: min(980px, 100%);
+  max-width: min(980px, 100%);
+  max-height: calc(100vh - 36px);
   border-radius: 18px;
   overflow:hidden;
   border: 1px solid rgba(255,255,255,.18);
   box-shadow: 0 30px 90px rgba(0,0,0,.35);
   background: rgba(255,255,255,.06);
 }
-.lightbox-img{width:100%; height:auto; display:block; background:#fff}
+/* portrait shots are 1200x1600: cap the height so they never run off screen */
+.lightbox-img{
+  display:block;
+  width:auto; height:auto;
+  max-width:100%;
+  max-height: calc(100vh - 36px);
+  background:#fff;
+}
 .lightbox-close{
   position:absolute;
   top:10px; right:10px;
@@ -496,6 +531,33 @@ h3{margin:0; font-size:15px; font-weight:900}
   border-radius: 999px;
   font-size:18px; font-weight:900;
   cursor:pointer;
+}
+.lightbox-nav{
+  position:absolute;
+  top:50%;
+  transform: translateY(-50%);
+  width:44px; height:44px;
+  padding:0 0 4px;
+  border:none;
+  border-radius:999px;
+  background: rgba(255,255,255,.90);
+  color:#111827;
+  font-size:28px; font-weight:900; line-height:1;
+  display:grid; place-items:center;
+  cursor:pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
+.lightbox-nav.prev{left:10px}
+.lightbox-nav.next{right:10px}
+.lightbox-count{
+  position:absolute;
+  bottom:10px; left:50%;
+  transform: translateX(-50%);
+  background: rgba(17,24,39,.75);
+  color:#fff;
+  font-size:12px; font-weight:800;
+  padding:5px 12px;
+  border-radius:999px;
 }
 
 /* On desktop the hero already carries the CTA: keep the bar as a small

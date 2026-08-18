@@ -4,8 +4,13 @@
    CONFIG — the only lines you normally need to touch
    ===================================================================== */
 const WHATSAPP_PHONE_E164 = "66917027652";  // international format, no "+"
-const LINE_URL            = "";             // e.g. "https://line.me/R/ti/p/~yourlineid"
-                                            // leave "" and the LINE buttons are removed
+const LINE_URL = "https://line.me/ti/p/dhMSH5t2T3";  // LINE "add friend" link
+                                            // set to "" and the LINE buttons are removed
+const OPEN_HOUR           = 10;             // opens 10:00 — same hours every day
+const CLOSE_HOUR          = 22;             // closes 22:00
+                                            // always read in Bangkok time, so a visitor
+                                            // whose phone is on another timezone still
+                                            // sees the shop's real status
 const PHOTO_COUNT         = 20;             // number of files in /photos (1.jpg … N.jpg)
 const PHOTOS_SHOWN        = 6;              // how many to show at random
 /* ===================================================================== */
@@ -21,7 +26,11 @@ const COPY = {
     waOutro: "Date/time: __",
     bookDefault: "Book on WhatsApp",
     bookN: (n) => (n === 1 ? "Book 1 service" : `Book ${n} services`),
-    selectedN: (n) => (n === 1 ? "1 service selected" : `${n} services selected`)
+    selectedN: (n) => (n === 1 ? "1 service selected" : `${n} services selected`),
+    openNow: (close) => `🟢 Open now · until ${close}`,
+    closingSoon: (min) => `🟠 Closing in ${min} min`,
+    closedUntil: (open) => `🔴 Closed · opens at ${open}`,
+    closedTomorrow: (open) => `🔴 Closed · opens tomorrow ${open}`
   },
   th: {
     waPlain: "สวัสดีค่ะ Nail by Tip ขอจองคิวค่ะ วัน/เวลา: __ / บริการ: __ / (ถ้ามี) รูปตัวอย่างลาย",
@@ -29,7 +38,11 @@ const COPY = {
     waOutro: "วัน/เวลา: __",
     bookDefault: "จองผ่าน WhatsApp",
     bookN: (n) => `จอง ${n} บริการ`,
-    selectedN: (n) => `เลือก ${n} บริการ`
+    selectedN: (n) => `เลือก ${n} บริการ`,
+    openNow: (close) => `🟢 เปิดอยู่ · ถึง ${close}`,
+    closingSoon: (min) => `🟠 ปิดในอีก ${min} นาที`,
+    closedUntil: (open) => `🔴 ปิดอยู่ · เปิด ${open}`,
+    closedTomorrow: (open) => `🔴 ปิดอยู่ · เปิดพรุ่งนี้ ${open}`
   }
 };
 
@@ -99,6 +112,51 @@ function updateBooking() {
   if (count) count.textContent = t.selectedN(n);
 }
 
+/* ---------- Open / closed, in Bangkok time ---------- */
+const statusChip = qs("#statusChip");
+
+function bangkokMinutes() {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Bangkok",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).formatToParts(new Date());
+  const val = (type) => Number(parts.find((p) => p.type === type).value);
+  return (val("hour") % 24) * 60 + val("minute"); // %24: some engines report midnight as 24
+}
+
+function updateStatus() {
+  if (!statusChip) return;
+  const t = COPY[lang];
+  const now = bangkokMinutes();
+  const open = OPEN_HOUR * 60;
+  const close = CLOSE_HOUR * 60;
+  const hhmm = (h) => String(h).padStart(2, "0") + ":00";
+
+  let text, state;
+  if (now < open) {
+    text = t.closedUntil(hhmm(OPEN_HOUR));
+    state = "closed";
+  } else if (now >= close) {
+    text = t.closedTomorrow(hhmm(OPEN_HOUR));
+    state = "closed";
+  } else if (close - now <= 60) {
+    text = t.closingSoon(close - now);
+    state = "soon";
+  } else {
+    text = t.openNow(hhmm(CLOSE_HOUR));
+    state = "open";
+  }
+
+  statusChip.textContent = text;
+  statusChip.dataset.state = state;
+  statusChip.hidden = false;
+}
+
+// the page can stay open for a while: keep the status honest
+setInterval(updateStatus, 60000);
+
 /* ---------- Language ---------- */
 let lang = (navigator.language || "en").toLowerCase().startsWith("th") ? "th" : "en";
 
@@ -110,7 +168,9 @@ function applyLang() {
   const label = qs("#langLabel");
   if (label) label.textContent = lang === "th" ? "TH" : "EN";
   document.documentElement.lang = lang;
-  updateBooking(); // must run last: it overrides the booking labels
+  // both must run last: they rewrite text applyLang has just set
+  updateBooking();
+  updateStatus();
 }
 
 const langBtn = qs("#langBtn");
@@ -196,14 +256,28 @@ setTimeout(() => {
   if (!qs(".reveal.in")) document.documentElement.classList.remove("js");
 }, 800);
 
-/* ---------- Lightbox ---------- */
+/* ---------- Lightbox (browse the whole set, swipe or arrows) ---------- */
 const lb = qs("#lightbox");
 const lbImg = qs("#lightboxImg");
 const lbClose = qs("#lightboxClose");
+const lbPrev = qs("#lightboxPrev");
+const lbNext = qs("#lightboxNext");
+const lbCount = qs("#lightboxCount");
 
-function openLightbox(src) {
+let lbList = [];
+let lbIndex = 0;
+
+function showLightboxAt(i) {
+  if (!lbList.length || !lbImg) return;
+  lbIndex = (i + lbList.length) % lbList.length; // wraps at both ends
+  lbImg.src = lbList[lbIndex];
+  if (lbCount) lbCount.textContent = `${lbIndex + 1} / ${lbList.length}`;
+}
+
+function openLightbox(list, index) {
   if (!lb || !lbImg) return;
-  lbImg.src = src;
+  lbList = list;
+  showLightboxAt(index);
   lb.classList.add("open");
   lb.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
@@ -217,33 +291,63 @@ function closeLightbox() {
   if (lbImg) lbImg.src = "";
 }
 
+const isOpen = () => !!lb && lb.classList.contains("open");
+
 if (lbClose) lbClose.addEventListener("click", closeLightbox);
+if (lbPrev) lbPrev.addEventListener("click", (e) => { e.stopPropagation(); showLightboxAt(lbIndex - 1); });
+if (lbNext) lbNext.addEventListener("click", (e) => { e.stopPropagation(); showLightboxAt(lbIndex + 1); });
 if (lb) lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeLightbox(); });
 
-/* ---------- Random gallery ---------- */
-(function randomGallery() {
-  const gallery = qs("#gallery");
-  if (!gallery) return;
+document.addEventListener("keydown", (e) => {
+  if (!isOpen()) return;
+  if (e.key === "Escape") closeLightbox();
+  else if (e.key === "ArrowLeft") showLightboxAt(lbIndex - 1);
+  else if (e.key === "ArrowRight") showLightboxAt(lbIndex + 1);
+});
 
-  const all = Array.from({ length: PHOTO_COUNT }, (_, i) => i + 1);
-  for (let i = all.length - 1; i > 0; i--) {
+// swipe left/right on touch
+let swipeFrom = null;
+if (lb) {
+  lb.addEventListener("touchstart", (e) => { swipeFrom = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener("touchend", (e) => {
+    if (swipeFrom === null) return;
+    const dx = e.changedTouches[0].clientX - swipeFrom;
+    if (Math.abs(dx) > 45) showLightboxAt(lbIndex + (dx < 0 ? 1 : -1));
+    swipeFrom = null;
+  }, { passive: true });
+}
+
+/* ---------- Gallery: 6 at random, expandable to the whole set ---------- */
+(function gallery() {
+  const grid = qs("#gallery");
+  const moreBtn = qs("#galleryMore");
+  if (!grid) return;
+
+  const order = Array.from({ length: PHOTO_COUNT }, (_, i) => i + 1);
+  for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [all[i], all[j]] = [all[j], all[i]];
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  const srcs = order.map((n) => `photos/${n}.jpg`);
+  let shown = 0;
+
+  function showUpTo(count) {
+    const to = Math.min(count, srcs.length);
+    grid.insertAdjacentHTML("beforeend", srcs.slice(shown, to).map((src, i) => `
+      <button class="shot" type="button" data-i="${shown + i}">
+        <img loading="lazy" decoding="async" width="400" height="400"
+             src="${src}" alt="Nail by Tip work photo">
+      </button>`).join(""));
+    shown = to;
+    if (moreBtn) moreBtn.hidden = shown >= srcs.length;
   }
 
-  gallery.innerHTML = all
-    .slice(0, PHOTOS_SHOWN)
-    .map(
-      (n) => `
-      <button class="shot" type="button" data-full="photos/${n}.jpg">
-        <img loading="lazy" decoding="async" width="400" height="400"
-             src="photos/${n}.jpg" alt="Nail by Tip work ${n}">
-      </button>`
-    )
-    .join("");
+  // one delegated listener, so appended photos work too
+  grid.addEventListener("click", (e) => {
+    const btn = e.target.closest(".shot");
+    if (btn) openLightbox(srcs, Number(btn.dataset.i)); // browse all, not just the visible ones
+  });
 
-  qsa("#gallery .shot").forEach((btn) =>
-    btn.addEventListener("click", () => openLightbox(btn.getAttribute("data-full")))
-  );
+  if (moreBtn) moreBtn.addEventListener("click", () => showUpTo(srcs.length));
+  showUpTo(PHOTOS_SHOWN);
 })();
