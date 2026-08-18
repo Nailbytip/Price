@@ -12,7 +12,6 @@ const CLOSE_HOUR          = 22;             // closes 22:00
                                             // whose phone is on another timezone still
                                             // sees the shop's real status
 const PHOTO_COUNT         = 20;             // number of files in /photos (1.jpg … N.jpg)
-const PHOTOS_SHOWN        = 6;              // how many to show at random
 /* ===================================================================== */
 
 const qs = (s) => document.querySelector(s);
@@ -317,11 +316,10 @@ if (lb) {
   }, { passive: true });
 }
 
-/* ---------- Gallery: 6 at random, expandable to the whole set ---------- */
+/* ---------- Gallery: horizontal strip, whole set in random order ---------- */
 (function gallery() {
-  const grid = qs("#gallery");
-  const moreBtn = qs("#galleryMore");
-  if (!grid) return;
+  const strip = qs("#gallery");
+  if (!strip) return;
 
   const order = Array.from({ length: PHOTO_COUNT }, (_, i) => i + 1);
   for (let i = order.length - 1; i > 0; i--) {
@@ -329,25 +327,34 @@ if (lb) {
     [order[i], order[j]] = [order[j], order[i]];
   }
   const srcs = order.map((n) => `photos/${n}.jpg`);
-  let shown = 0;
 
-  function showUpTo(count) {
-    const to = Math.min(count, srcs.length);
-    grid.insertAdjacentHTML("beforeend", srcs.slice(shown, to).map((src, i) => `
-      <button class="shot" type="button" data-i="${shown + i}">
-        <img loading="lazy" decoding="async" width="400" height="400"
+  // all 20 are in the DOM but lazy: only the few on screen are downloaded
+  strip.innerHTML = srcs.map((src, i) => `
+      <button class="shot" type="button" data-i="${i}">
+        <img loading="lazy" decoding="async" width="400" height="500"
              src="${src}" alt="Nail by Tip work photo">
-      </button>`).join(""));
-    shown = to;
-    if (moreBtn) moreBtn.hidden = shown >= srcs.length;
-  }
+      </button>`).join("");
 
-  // one delegated listener, so appended photos work too
-  grid.addEventListener("click", (e) => {
+  strip.addEventListener("click", (e) => {
     const btn = e.target.closest(".shot");
-    if (btn) openLightbox(srcs, Number(btn.dataset.i)); // browse all, not just the visible ones
+    if (btn) openLightbox(srcs, Number(btn.dataset.i));
   });
 
-  if (moreBtn) moreBtn.addEventListener("click", () => showUpTo(srcs.length));
-  showUpTo(PHOTOS_SHOWN);
+  /* arrows — pointer devices only, touch users swipe */
+  const prevBtn = qs("#galPrev");
+  const nextBtn = qs("#galNext");
+  const step = () => Math.max(170, strip.clientWidth * 0.8);
+
+  function syncArrows() {
+    if (!prevBtn || !nextBtn) return;
+    const max = strip.scrollWidth - strip.clientWidth - 2;
+    prevBtn.disabled = strip.scrollLeft <= 2;
+    nextBtn.disabled = strip.scrollLeft >= max;
+  }
+
+  if (prevBtn) prevBtn.addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
+  if (nextBtn) nextBtn.addEventListener("click", () => strip.scrollBy({ left: step(), behavior: "smooth" }));
+  strip.addEventListener("scroll", syncArrows, { passive: true });
+  window.addEventListener("resize", syncArrows);
+  syncArrows();
 })();
