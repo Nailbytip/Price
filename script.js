@@ -11,7 +11,7 @@ const CLOSE_HOUR          = 22;             // closes 22:00
                                             // always read in Bangkok time, so a visitor
                                             // whose phone is on another timezone still
                                             // sees the shop's real status
-const PHOTO_COUNT         = 29;             // files in /photos (1.jpg … N.jpg): 1-20 nails, 21-29 hair
+const PHOTO_COUNT         = 28;             // files in /photos (1.jpg … N.jpg): 1-20 nails, 21-28 hair
 /* ===================================================================== */
 
 const qs = (s) => document.querySelector(s);
