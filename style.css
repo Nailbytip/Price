@@ -71,11 +71,17 @@ main.wrap.page{
   box-shadow: 0 12px 30px rgba(0,0,0,.06);
   flex:0 0 auto;
 }
-.mark-logo{padding:0}
+/* the logo is a circle on a transparent background, so the tinted square
+   behind it showed through its corners — the mark carries no chrome of its own */
+.mark-logo{
+  padding:0;
+  background:none;
+  border:0;
+  box-shadow:none;
+}
 .mark-logo img{
   width:44px; height:44px;
-  border-radius:16px;
-  object-fit:cover;
+  object-fit:contain;
   display:block;
 }
 h1{font-size:17px; margin:0; line-height:1.2; font-weight:900; white-space:nowrap}
