@@ -391,15 +391,16 @@ if (lb) {
     nextBtn.disabled = strip.scrollLeft >= max;
   }
 
-  // the before/after strip in the Hair card browses its own pair
-  const mini = qs("#hairBA");
-  if (mini) {
-    const baSrcs = qsa("#hairBA .shot").map((b) => b.dataset.full);
-    mini.addEventListener("click", (e) => {
+  // strips inside a price card browse only their own set — the before/after
+  // pair, or the lash chart where every tile points at the same full image
+  qsa(".minigal").forEach((mg) => {
+    const shots = Array.from(mg.querySelectorAll(".shot"));
+    const srcs = [...new Set(shots.map((b) => b.dataset.full))];
+    mg.addEventListener("click", (e) => {
       const btn = e.target.closest(".shot");
-      if (btn) openLightbox(baSrcs, baSrcs.indexOf(btn.dataset.full));
+      if (btn) openLightbox(srcs, Math.max(0, srcs.indexOf(btn.dataset.full)));
     });
-  }
+  });
 
   if (prevBtn) prevBtn.addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
   if (nextBtn) nextBtn.addEventListener("click", () => strip.scrollBy({ left: step(), behavior: "smooth" }));
