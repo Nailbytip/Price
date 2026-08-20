@@ -603,6 +603,31 @@ h3{margin:0; font-size:15px; font-weight:900}
 .bb-icon.js-line{background:transparent; border-color:transparent; padding:0}
 .bb-icon.js-line .ico-line{width:46px; height:46px}
 
+/* ===================== Thank-you / review page ===================== */
+body.plain{padding-bottom:28px}          /* no sticky booking bar on that page */
+.thanks h2{font-size:22px; margin-bottom:6px}
+.bigReview{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-top:16px;
+  padding:16px 18px;
+  border-radius:18px;
+  text-decoration:none;
+  background: linear-gradient(135deg, var(--pink), #ff7ec0);
+  color:#fff;
+  font-weight:900;
+  font-size:16px;
+  box-shadow: 0 16px 34px rgba(255,79,163,.30);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.bigReview:hover{transform: translateY(-1px); box-shadow: 0 22px 46px rgba(255,79,163,.38)}
+.bigReview:active{transform: translateY(0)}
+.bigReview-stars{font-size:15px; letter-spacing:1px; color:#ffe9a8}
+.thanks-note{margin-top:10px; text-align:center}
+.thanks-actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+
 /* ===================== Reveal =====================
    Scoped to .js (set by an inline script in <head>) so the content is
    always visible if JavaScript never runs. */
