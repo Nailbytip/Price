@@ -35,10 +35,10 @@ const COPY = {
     bookDefault: "Book on WhatsApp",
     bookN: (n) => (n === 1 ? "Book 1 service" : `Book ${n} services`),
     selectedN: (n) => (n === 1 ? "1 service selected" : `${n} services selected`),
-    openNow: (close) => `🟢 Open now · until ${close}`,
-    closingSoon: (min) => `🟠 Closing in ${min} min`,
-    closedUntil: (open) => `🔴 Closed · opens at ${open}`,
-    closedTomorrow: (open) => `🔴 Closed · opens tomorrow ${open}`
+    openNow: (close) => `Open now · until ${close}`,
+    closingSoon: (min) => `Closing in ${min} min`,
+    closedUntil: (open) => `Closed · opens at ${open}`,
+    closedTomorrow: (open) => `Closed · opens tomorrow ${open}`
   },
   th: {
     waPlain: "สวัสดีค่ะ Nail by Tip ขอจองคิวค่ะ วัน/เวลา: __ / บริการ: __ / (ถ้ามี) รูปตัวอย่างลาย",
@@ -47,10 +47,10 @@ const COPY = {
     bookDefault: "จองผ่าน WhatsApp",
     bookN: (n) => `จอง ${n} บริการ`,
     selectedN: (n) => `เลือก ${n} บริการ`,
-    openNow: (close) => `🟢 เปิดอยู่ · ถึง ${close}`,
-    closingSoon: (min) => `🟠 ปิดในอีก ${min} นาที`,
-    closedUntil: (open) => `🔴 ปิดอยู่ · เปิด ${open}`,
-    closedTomorrow: (open) => `🔴 ปิดอยู่ · เปิดพรุ่งนี้ ${open}`
+    openNow: (close) => `เปิดอยู่ · ถึง ${close}`,
+    closingSoon: (min) => `ปิดในอีก ${min} นาที`,
+    closedUntil: (open) => `ปิดอยู่ · เปิด ${open}`,
+    closedTomorrow: (open) => `ปิดอยู่ · เปิดพรุ่งนี้ ${open}`
   },
   ru: {
     waPlain: "Здравствуйте, Nail by Tip! Хочу записаться. Дата/время: __ / Услуга: __ / (по желанию) фото дизайна",
@@ -59,10 +59,10 @@ const COPY = {
     bookDefault: "Записаться",
     bookN: (n) => `Записаться: ${n} ${ruPlural(n, "услуга", "услуги", "услуг")}`,
     selectedN: (n) => `Выбрано: ${n} ${ruPlural(n, "услуга", "услуги", "услуг")}`,
-    openNow: (close) => `🟢 Открыто · до ${close}`,
-    closingSoon: (min) => `🟠 Закрытие через ${min} мин`,
-    closedUntil: (open) => `🔴 Закрыто · откроется в ${open}`,
-    closedTomorrow: (open) => `🔴 Закрыто · завтра с ${open}`
+    openNow: (close) => `Открыто · до ${close}`,
+    closingSoon: (min) => `Закрытие через ${min} мин`,
+    closedUntil: (open) => `Закрыто · откроется в ${open}`,
+    closedTomorrow: (open) => `Закрыто · завтра с ${open}`
   }
 };
 
