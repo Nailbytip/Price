@@ -414,7 +414,7 @@ h3{margin:0; font-size:15px; font-weight:900}
 
 /* lash chart tiles are wider than tall and carry their own caption */
 .minigal-lash .shot{width: clamp(210px, 66%, 280px)}
-.minigal-lash .shot img{aspect-ratio: 472/288}
+.minigal-lash .shot img{aspect-ratio: 472/250}
 .link{font-size:12px; color:var(--muted); text-decoration:none}
 .link:hover{text-decoration:underline}
 
