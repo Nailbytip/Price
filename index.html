@@ -37,7 +37,7 @@
     "telephone": "+66917027652",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "50 Moo 3, Tambon Ko Chang",
+      "streetAddress": "50/3, Tambon Ko Chang",
       "addressLocality": "Ko Chang District",
       "addressRegion": "Trat",
       "postalCode": "23170",
@@ -259,7 +259,6 @@
       <article class="card reveal" id="cat-lash" data-cat="lash">
         <div class="card-head">
           <h3 data-en="Lashes" data-th="ขนตา" data-ru="Ресницы">Lashes</h3>
-          <span class="badge badge-new" data-en="New" data-th="ใหม่" data-ru="Новинка">New</span>
         </div>
         <button class="row" type="button" aria-pressed="false">
           <span class="row-name" data-en="Eyelash extensions" data-th="ต่อขนตา" data-ru="Наращивание ресниц">Eyelash extensions</span>
@@ -288,7 +287,6 @@
       <article class="card reveal" id="cat-hair" data-cat="hair">
         <div class="card-head">
           <h3 data-en="Hair" data-th="ต่อผม" data-ru="Волосы">Hair</h3>
-          <span class="badge badge-new" data-en="New" data-th="ใหม่" data-ru="Новинка">New</span>
         </div>
         <button class="row" type="button" aria-pressed="false">
           <span class="row-name" data-en="Hair extensions (per strand)" data-th="ต่อผม (ต่อช่อ)" data-ru="Наращивание волос (за прядь)">Hair extensions (per strand)</span>
@@ -298,6 +296,19 @@
           <span class="row-name" data-en="Hair extensions (full set)" data-th="ต่อผม (เต็มหัว)" data-ru="Наращивание волос (полный набор)">Hair extensions (full set)</span>
           <span class="row-price" data-en="from 6900 THB" data-th="เริ่มต้น 6900 THB" data-ru="от 6900 THB">from 6900 THB</span>
         </button>
+        <!-- the before/after pair is the whole argument for a 6900 THB set,
+             so it sits next to the price, not down in the gallery -->
+        <div class="minigal" id="hairBA">
+          <button class="shot shot-wide" type="button" data-full="photos/ba/1.jpg">
+            <img loading="lazy" decoding="async" width="700" height="464"
+                 src="photos/ba/thumb-1.jpg" alt="Hair extensions before and after">
+          </button>
+          <button class="shot shot-wide" type="button" data-full="photos/ba/2.jpg">
+            <img loading="lazy" decoding="async" width="700" height="464"
+                 src="photos/ba/thumb-2.jpg" alt="Hair extensions before and after">
+          </button>
+        </div>
+
         <p class="note"
            data-en="100% real Vietnamese hair, top grade, fitted with the Korean feather technique — no keratin. Certified in Korean feather and keratin hair extensions."
            data-th="ผมจริงเวียดนามเกรดพรีเมียม ต่อด้วยเทคนิค Korean feather — ไม่ใช้คีราติน · ผ่านการอบรมหลักสูตร Korean feather และต่อผมคีราติน"
@@ -394,9 +405,9 @@
     <section class="card reveal" id="map">
       <h3 data-en="Location" data-th="ที่ตั้ง" data-ru="Как нас найти">Location</h3>
       <p class="addr"
-         data-en="50 Moo 3, Tambon Ko Chang, Ko Chang District, Trat 23170"
-         data-th="50 หมู่ 3 ตำบลเกาะช้าง อำเภอเกาะช้าง จังหวัดตราด 23170"
-         data-ru="50 Moo 3, Tambon Ko Chang, Ko Chang District, Trat 23170">50 Moo 3, Tambon Ko Chang, Ko Chang District, Trat 23170</p>
+         data-en="50/3, Tambon Ko Chang, Ko Chang District, Trat 23170"
+         data-th="50/3 ตำบลเกาะช้าง อำเภอเกาะช้าง จังหวัดตราด 23170"
+         data-ru="50/3, Tambon Ko Chang, Ko Chang District, Trat 23170">50/3, Tambon Ko Chang, Ko Chang District, Trat 23170</p>
       <a class="btn btn-map" href="https://maps.app.goo.gl/HysXzGgtAHdnfyDB9" target="_blank" rel="noreferrer">
         <span class="ico" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none">

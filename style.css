@@ -396,6 +396,22 @@ h3{margin:0; font-size:15px; font-weight:900}
 .note{margin:10px 0 0; font-size:12px; color:var(--muted)}
 .addr{margin:4px 0 12px; font-size:14px; line-height:1.5}
 
+/* before/after strip inside a price card — wider tiles, the pair is landscape */
+.minigal{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  overscroll-behavior-x:contain;
+  scroll-snap-type: x proximity;
+  scrollbar-width:none;
+  margin:14px -16px 0;
+  padding:2px 16px 4px;
+  scroll-padding-inline:16px;
+}
+.minigal::-webkit-scrollbar{display:none}
+.minigal .shot{width: clamp(250px, 82%, 360px)}
+.minigal .shot img{aspect-ratio: 3/2}
+
 /* lash style names — informative, not bookable rows */
 .styles{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px}
 .chip-sm{

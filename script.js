@@ -11,7 +11,7 @@ const CLOSE_HOUR          = 22;             // closes 22:00
                                             // always read in Bangkok time, so a visitor
                                             // whose phone is on another timezone still
                                             // sees the shop's real status
-const PHOTO_COUNT         = 20;             // number of files in /photos (1.jpg … N.jpg)
+const PHOTO_COUNT         = 29;             // files in /photos (1.jpg … N.jpg): 1-20 nails, 21-29 hair
 /* ===================================================================== */
 
 const qs = (s) => document.querySelector(s);
@@ -389,6 +389,16 @@ if (lb) {
     const max = strip.scrollWidth - strip.clientWidth - 2;
     prevBtn.disabled = strip.scrollLeft <= 2;
     nextBtn.disabled = strip.scrollLeft >= max;
+  }
+
+  // the before/after strip in the Hair card browses its own pair
+  const mini = qs("#hairBA");
+  if (mini) {
+    const baSrcs = qsa("#hairBA .shot").map((b) => b.dataset.full);
+    mini.addEventListener("click", (e) => {
+      const btn = e.target.closest(".shot");
+      if (btn) openLightbox(baSrcs, baSrcs.indexOf(btn.dataset.full));
+    });
   }
 
   if (prevBtn) prevBtn.addEventListener("click", () => strip.scrollBy({ left: -step(), behavior: "smooth" }));
