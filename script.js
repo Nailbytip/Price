@@ -29,8 +29,8 @@ const ruPlural = (n, one, few, many) => {
 
 const COPY = {
   en: {
-    waPlain: "Hi Nail by Tip! I'd like to book. Date/time: __ / Service: __ / (optional) design example photo",
-    waIntro: "Hi Nail by Tip! I'd like to book:",
+    waPlain: "Hi Tip! I'd like to book. Date/time: __ / Service: __ / (optional) design example photo",
+    waIntro: "Hi Tip! I'd like to book:",
     waOutro: "Date/time: __",
     bookDefault: "Book on WhatsApp",
     bookN: (n) => (n === 1 ? "Book 1 service" : `Book ${n} services`),
@@ -41,8 +41,8 @@ const COPY = {
     closedTomorrow: (open) => `Closed · opens tomorrow ${open}`
   },
   th: {
-    waPlain: "สวัสดีค่ะ Nail by Tip ขอจองคิวค่ะ วัน/เวลา: __ / บริการ: __ / (ถ้ามี) รูปตัวอย่างลาย",
-    waIntro: "สวัสดีค่ะ Nail by Tip ขอจองคิวค่ะ",
+    waPlain: "สวัสดีค่ะ คุณ Tip ขอจองคิวค่ะ วัน/เวลา: __ / บริการ: __ / (ถ้ามี) รูปตัวอย่างลาย",
+    waIntro: "สวัสดีค่ะ คุณ Tip ขอจองคิวค่ะ",
     waOutro: "วัน/เวลา: __",
     bookDefault: "จองผ่าน WhatsApp",
     bookN: (n) => `จอง ${n} บริการ`,
@@ -53,8 +53,8 @@ const COPY = {
     closedTomorrow: (open) => `ปิดอยู่ · เปิดพรุ่งนี้ ${open}`
   },
   ru: {
-    waPlain: "Здравствуйте, Nail by Tip! Хочу записаться. Дата/время: __ / Услуга: __ / (по желанию) фото дизайна",
-    waIntro: "Здравствуйте, Nail by Tip! Хочу записаться:",
+    waPlain: "Здравствуйте, Tip! Хочу записаться. Дата/время: __ / Услуга: __ / (по желанию) фото дизайна",
+    waIntro: "Здравствуйте, Tip! Хочу записаться:",
     waOutro: "Дата/время: __",
     bookDefault: "Записаться",
     bookN: (n) => `Записаться: ${n} ${ruPlural(n, "услуга", "услуги", "услуг")}`,
