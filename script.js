@@ -326,10 +326,12 @@ if (lb) {
     const j = Math.floor(Math.random() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];
   }
-  const srcs = order.map((n) => `photos/${n}.jpg`);
+  // the strip shows 450px thumbnails (~35 KB); the lightbox gets the originals
+  const thumbs = order.map((n) => `photos/thumb/${n}.jpg`);
+  const fulls = order.map((n) => `photos/${n}.jpg`);
 
   // all 20 are in the DOM but lazy: only the few on screen are downloaded
-  strip.innerHTML = srcs.map((src, i) => `
+  strip.innerHTML = thumbs.map((src, i) => `
       <button class="shot" type="button" data-i="${i}">
         <img loading="lazy" decoding="async" width="400" height="500"
              src="${src}" alt="Nail by Tip work photo">
@@ -337,7 +339,7 @@ if (lb) {
 
   strip.addEventListener("click", (e) => {
     const btn = e.target.closest(".shot");
-    if (btn) openLightbox(srcs, Number(btn.dataset.i));
+    if (btn) openLightbox(fulls, Number(btn.dataset.i));
   });
 
   /* arrows — pointer devices only, touch users swipe */
