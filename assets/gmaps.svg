@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-label="Google Maps">
+  <defs>
+    <clipPath id="pin">
+      <path d="M24 3c-8.8 0-16 7.1-16 15.9 0 3.2 1 6.2 2.7 8.7L24 46l13.3-18.4c1.7-2.5 2.7-5.5 2.7-8.7C40 10.1 32.8 3 24 3z"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#pin)">
+    <rect x="0" y="0" width="48" height="48" fill="#4285F4"/>
+    <path d="M-4 30 L52 30 L52 -4 L-4 -4 Z" fill="#34A853"/>
+    <path d="M6 -4 L52 -4 L52 34 Z" fill="#FBBC04"/>
+    <path d="M-4 -4 L34 -4 L-4 26 Z" fill="#EA4335"/>
+  </g>
+  <circle cx="24" cy="18.6" r="5.9" fill="#fff"/>
+</svg>

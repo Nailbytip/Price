@@ -598,6 +598,10 @@ h3{margin:0; font-size:15px; font-weight:900}
   color:var(--text);
 }
 .bb-icon:hover{border-color: rgba(124,108,255,.45)}
+/* the LINE mark is already a filled green disc — let it be the button itself
+   instead of sitting as a circle inside another circle */
+.bb-icon.js-line{background:transparent; border-color:transparent; padding:0}
+.bb-icon.js-line .ico-line{width:46px; height:46px}
 
 /* ===================== Reveal =====================
    Scoped to .js (set by an inline script in <head>) so the content is
