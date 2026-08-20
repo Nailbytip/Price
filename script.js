@@ -1,5 +1,5 @@
 /* =====================================================================
-   Nail by Tip — price menu
+   Nailgel Bytip — price menu
    ---------------------------------------------------------------------
    CONFIG — the only lines you normally need to touch
    ===================================================================== */
@@ -371,7 +371,7 @@ if (lb) {
   strip.innerHTML = thumbs.map((src, i) => `
       <button class="shot" type="button" data-i="${i}">
         <img loading="lazy" decoding="async" width="400" height="500"
-             src="${src}" alt="Nail by Tip work photo">
+             src="${src}" alt="Nailgel Bytip work photo">
       </button>`).join("");
 
   strip.addEventListener("click", (e) => {
