@@ -1,3 +1,7 @@
 # Documents internes — ne doivent pas etre publies sur le site
 nail-beauty-price-board.html
 affiche-corrections.md
+
+# Profils de navigateur crees par les outils de test — jamais dans le depot
+cdp*/
+edgeprofile/

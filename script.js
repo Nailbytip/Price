@@ -17,7 +17,16 @@ const PHOTO_COUNT         = 20;             // number of files in /photos (1.jpg
 const qs = (s) => document.querySelector(s);
 const qsa = (s) => Array.from(document.querySelectorAll(s));
 
-/* ---------- Copy that JS builds at runtime (EN / TH) ---------- */
+/* ---------- Copy that JS builds at runtime (EN / TH / RU) ---------- */
+
+// Russian nouns take three forms after a number: 1 услуга, 2 услуги, 5 услуг.
+const ruPlural = (n, one, few, many) => {
+  const d = n % 10, h = n % 100;
+  if (d === 1 && h !== 11) return one;
+  if (d >= 2 && d <= 4 && (h < 12 || h > 14)) return few;
+  return many;
+};
+
 const COPY = {
   en: {
     waPlain: "Hi Nail by Tip! I'd like to book. Date/time: __ / Service: __ / (optional) design example photo",
@@ -42,6 +51,18 @@ const COPY = {
     closingSoon: (min) => `🟠 ปิดในอีก ${min} นาที`,
     closedUntil: (open) => `🔴 ปิดอยู่ · เปิด ${open}`,
     closedTomorrow: (open) => `🔴 ปิดอยู่ · เปิดพรุ่งนี้ ${open}`
+  },
+  ru: {
+    waPlain: "Здравствуйте, Nail by Tip! Хочу записаться. Дата/время: __ / Услуга: __ / (по желанию) фото дизайна",
+    waIntro: "Здравствуйте, Nail by Tip! Хочу записаться:",
+    waOutro: "Дата/время: __",
+    bookDefault: "Записаться",
+    bookN: (n) => `Записаться: ${n} ${ruPlural(n, "услуга", "услуги", "услуг")}`,
+    selectedN: (n) => `Выбрано: ${n} ${ruPlural(n, "услуга", "услуги", "услуг")}`,
+    openNow: (close) => `🟢 Открыто · до ${close}`,
+    closingSoon: (min) => `🟠 Закрытие через ${min} мин`,
+    closedUntil: (open) => `🔴 Закрыто · откроется в ${open}`,
+    closedTomorrow: (open) => `🔴 Закрыто · завтра с ${open}`
   }
 };
 
@@ -157,26 +178,42 @@ function updateStatus() {
 setInterval(updateStatus, 60000);
 
 /* ---------- Language ---------- */
-let lang = (navigator.language || "en").toLowerCase().startsWith("th") ? "th" : "en";
+const LANGS = ["en", "th", "ru"];
+const LANG_KEY = "nbt-lang";
+
+function detectLang() {
+  try {
+    const saved = localStorage.getItem(LANG_KEY);
+    if (LANGS.includes(saved)) return saved;
+  } catch (e) { /* private browsing: fall through to the phone's setting */ }
+
+  for (const pref of navigator.languages || [navigator.language || "en"]) {
+    const code = String(pref).toLowerCase().slice(0, 2);
+    if (LANGS.includes(code)) return code;
+  }
+  return "en";
+}
+
+let lang = detectLang();
 
 function applyLang() {
   qsa("[data-en]").forEach((el) => {
-    const v = el.getAttribute(lang === "th" ? "data-th" : "data-en");
+    const v = el.getAttribute("data-" + lang);
     if (v !== null) el.textContent = v;
   });
-  const label = qs("#langLabel");
-  if (label) label.textContent = lang === "th" ? "TH" : "EN";
   document.documentElement.lang = lang;
+  const sel = qs("#langSel");
+  if (sel) sel.value = lang;
   // both must run last: they rewrite text applyLang has just set
   updateBooking();
   updateStatus();
 }
 
-const langBtn = qs("#langBtn");
-if (langBtn) {
-  langBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    lang = lang === "en" ? "th" : "en";
+const langSel = qs("#langSel");
+if (langSel) {
+  langSel.addEventListener("change", () => {
+    lang = LANGS.includes(langSel.value) ? langSel.value : "en";
+    try { localStorage.setItem(LANG_KEY, lang); } catch (e) { /* nothing to do */ }
     applyLang();
   });
 }
