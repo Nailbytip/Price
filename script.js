@@ -11,7 +11,8 @@ const CLOSE_HOUR          = 22;             // closes 22:00
                                             // always read in Bangkok time, so a visitor
                                             // whose phone is on another timezone still
                                             // sees the shop's real status
-const PHOTO_COUNT         = 28;             // files in /photos (1.jpg … N.jpg): 1-20 nails, 21-28 hair
+const PHOTO_LIST          = "photos/gallery.json";  // work photos, in display order
+                                            // edited from admin.html — no need to touch by hand
 /* ===================================================================== */
 
 const qs = (s) => document.querySelector(s);
@@ -353,26 +354,31 @@ if (lb) {
   }, { passive: true });
 }
 
-/* ---------- Gallery: horizontal strip, whole set in random order ---------- */
+/* ---------- Gallery: horizontal strip, in the order set from admin.html ---------- */
 (function gallery() {
   const strip = qs("#gallery");
   if (!strip) return;
 
-  const order = Array.from({ length: PHOTO_COUNT }, (_, i) => i + 1);
-  for (let i = order.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [order[i], order[j]] = [order[j], order[i]];
-  }
-  // the strip shows 450px thumbnails (~35 KB); the lightbox gets the originals
-  const thumbs = order.map((n) => `photos/thumb/${n}.jpg`);
-  const fulls = order.map((n) => `photos/${n}.jpg`);
+  let fulls = [];
 
-  // all 20 are in the DOM but lazy: only the few on screen are downloaded
-  strip.innerHTML = thumbs.map((src, i) => `
+  function render(names) {
+    // the strip shows 450px thumbnails (~35 KB); the lightbox gets the originals
+    fulls = names.map((n) => `photos/${n}`);
+    // all are in the DOM but lazy: only the few on screen are downloaded
+    strip.innerHTML = names.map((n, i) => `
       <button class="shot" type="button" data-i="${i}">
         <img loading="lazy" decoding="async" width="400" height="500"
-             src="${src}" alt="Nailgel Bytip work photo">
+             src="photos/thumb/${n}" alt="Nailgel Bytip work photo">
       </button>`).join("");
+    syncArrows();
+  }
+
+  // the timestamp skips GitHub Pages' 10-minute cache, so a change made
+  // in admin.html shows up as soon as the site has rebuilt
+  fetch(`${PHOTO_LIST}?v=${Date.now()}`)
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+    .then((names) => render(Array.isArray(names) ? names : []))
+    .catch(() => strip.closest("#photos")?.classList.add("no-photos"));
 
   strip.addEventListener("click", (e) => {
     const btn = e.target.closest(".shot");

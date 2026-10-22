@@ -763,3 +763,5 @@ body.plain{padding-bottom:28px}          /* no sticky booking bar on that page *
   .js .reveal{opacity:1; transform:none; transition:none}
   .catnav-inner{scroll-behavior:auto}
 }
+
+.photos.no-photos{display:none}
