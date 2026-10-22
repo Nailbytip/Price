@@ -21,7 +21,7 @@ const qsa = (s) => Array.from(document.querySelectorAll(s));
 const isVideo = (src) => /\.(mp4|mov|m4v|webm)$/i.test(src);
 const thumbOf = (src) => src.replace(/^photos\//, "photos/thumb/").replace(/\.[^./]+$/, ".jpg");
 
-/* ---------- Copy that JS builds at runtime (EN / TH / RU) ---------- */
+/* ---------- Copy that JS builds at runtime (EN / TH / RU / DE / FR) ---------- */
 
 // Russian nouns take three forms after a number: 1 услуга, 2 услуги, 5 услуг.
 const ruPlural = (n, one, few, many) => {
@@ -67,8 +67,32 @@ const COPY = {
     closingSoon: (min) => `Закрытие через ${min} мин`,
     closedUntil: (open) => `Закрыто · откроется в ${open}`,
     closedTomorrow: (open) => `Закрыто · завтра с ${open}`
+  },
+  // German and French visitors write to Tip in English (see MESSAGE_IN_ENGLISH):
+  // she reads English, not German or French
+  de: {
+    bookDefault: "Per WhatsApp buchen",
+    bookN: (n) => (n === 1 ? "1 Leistung buchen" : `${n} Leistungen buchen`),
+    selectedN: (n) => (n === 1 ? "1 Leistung ausgewählt" : `${n} Leistungen ausgewählt`),
+    openNow: (close) => `Jetzt geöffnet · bis ${close}`,
+    closingSoon: (min) => `Schließt in ${min} Min.`,
+    closedUntil: (open) => `Geschlossen · öffnet um ${open}`,
+    closedTomorrow: (open) => `Geschlossen · öffnet morgen um ${open}`
+  },
+  fr: {
+    bookDefault: "Réserver sur WhatsApp",
+    bookN: (n) => (n === 1 ? "Réserver 1 prestation" : `Réserver ${n} prestations`),
+    selectedN: (n) => (n === 1 ? "1 prestation choisie" : `${n} prestations choisies`),
+    openNow: (close) => `Ouvert · jusqu'à ${close}`,
+    closingSoon: (min) => `Ferme dans ${min} min`,
+    closedUntil: (open) => `Fermé · ouvre à ${open}`,
+    closedTomorrow: (open) => `Fermé · ouvre demain à ${open}`
   }
 };
+const MESSAGE_IN_ENGLISH = ["de", "fr"];
+for (const l of MESSAGE_IN_ENGLISH) {
+  for (const k of ["waPlain", "waIntro", "waOutro"]) COPY[l][k] = COPY.en[k];
+}
 
 /* ---------- Footer year ---------- */
 const yearEl = qs("#year");
@@ -128,7 +152,12 @@ if (clearBtn) {
 function serviceLine(row) {
   const name = row.querySelector(".row-name");
   const price = row.querySelector(".row-price");
-  return `• ${name ? name.textContent.trim() : ""} — ${price ? price.textContent.trim() : ""}`;
+  const label = (el) => {
+    if (!el) return "";
+    const en = MESSAGE_IN_ENGLISH.includes(lang) && el.getAttribute("data-en");
+    return (en || el.textContent).trim();
+  };
+  return `• ${label(name)} — ${label(price)}`;
 }
 
 function buildMessage() {
@@ -204,7 +233,7 @@ function updateStatus() {
 setInterval(updateStatus, 60000);
 
 /* ---------- Language ---------- */
-const LANGS = ["en", "th", "ru"];
+const LANGS = ["en", "th", "ru", "de", "fr"];
 const LANG_KEY = "nbt-lang";
 
 function detectLang() {
