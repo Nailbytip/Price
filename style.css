@@ -418,6 +418,18 @@ h3{margin:0; font-size:15px; font-weight:900}
 }
 
 .note{margin:10px 0 0; font-size:12px; color:var(--muted)}
+/* what the price includes: sits above the rows so it is read before the prices */
+.incl{
+  margin:0 0 6px;
+  padding:8px 12px;
+  border-radius:12px;
+  border:1px solid rgba(255,79,163,.22);
+  background: rgba(255,79,163,.08);
+  color:var(--pink-deep);
+  font-size:13px;
+  font-weight:800;
+  line-height:1.4;
+}
 .addr{margin:4px 0 12px; font-size:14px; line-height:1.5}
 
 /* before/after strip inside a price card — wider tiles, the pair is landscape */
