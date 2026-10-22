@@ -80,6 +80,28 @@ qsa(".js-line").forEach((el) => {
   else el.remove();
 });
 
+/* ---------- Click counting (GoatCounter events) ----------
+   Every way out to a booking or to Google is counted, so the dashboard shows
+   how many visits turn into a WhatsApp/LINE message, a map look-up or a review.
+   Event name = the channel; title = which button and on which page. */
+const CLICK_CHANNELS = [
+  [/wa\.me/, "click-whatsapp"],
+  [/line\.me/, "click-line"],
+  [/g\.page\/.*review/, "click-google-review"],
+  [/maps\.app\.goo\.gl|google\.[a-z.]+\/maps/, "click-google-maps"],
+];
+document.addEventListener("click", (e) => {
+  const a = e.target.closest("a[href]");
+  if (!a || !window.goatcounter || !window.goatcounter.count) return;
+  const hit = CLICK_CHANNELS.find(([re]) => re.test(a.href));
+  if (!hit) return;
+  const place = a.id || a.classList[0] || "link";
+  const page = /review/.test(location.pathname) ? "review page" : "menu";
+  // tells whether the tap-a-service list is used before writing on WhatsApp
+  const picked = hit[1] === "click-whatsapp" && selected.size ? " · services picked" : "";
+  window.goatcounter.count({ path: hit[1], title: `${place} · ${page}${picked}`, event: true });
+});
+
 /* ---------- Service selection ---------- */
 const selected = new Set();
 const rows = qsa(".row");
