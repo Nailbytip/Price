@@ -1,0 +1,13 @@
+{
+  "name": "Bytip Photos",
+  "short_name": "Bytip Photos",
+  "start_url": "./admin.html",
+  "scope": "./admin.html",
+  "display": "standalone",
+  "background_color": "#fff7fb",
+  "theme_color": "#ff4fa3",
+  "icons": [
+    { "src": "assets/icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "assets/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

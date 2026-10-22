@@ -1,13 +1,19 @@
 <!doctype html>
-<html lang="en">
+<html lang="th">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Photo Manager — Nailgel Bytip</title>
+  <title>Bytip Photos</title>
   <meta name="robots" content="noindex, nofollow" />
   <meta name="theme-color" content="#ff4fa3" />
+  <!-- "Add to Home Screen" on iPhone opens this page full screen, like an app -->
+  <link rel="manifest" href="admin.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Bytip Photos" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <link rel="icon" href="assets/logo.png" />
-  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <link rel="apple-touch-icon" href="assets/icon-180.png" />
   <style>
     :root{
       --bg:#fff7fb; --card:#fff; --text:#111827; --muted:#6b7280; --line:#e5e7eb;
@@ -17,11 +23,13 @@
     body{
       margin:0; background:var(--bg); color:var(--text);
       font:15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif;
-      padding-bottom:96px;
+      padding-bottom:calc(96px + env(safe-area-inset-bottom));
+      -webkit-tap-highlight-color: transparent;
     }
     header{
       display:flex; align-items:center; gap:10px;
-      padding:12px 16px; background:#fff; border-bottom:1px solid var(--line);
+      padding:calc(12px + env(safe-area-inset-top)) 16px 12px;
+      background:#fff; border-bottom:1px solid var(--line);
       position:sticky; top:0; z-index:5;
     }
     header img{width:36px; height:36px; border-radius:10px}
@@ -36,12 +44,16 @@
     .btn:disabled{opacity:.45; cursor:default}
     .btn-ghost{background:#fff; color:var(--text); border:1px solid var(--line)}
     .btn-small{padding:7px 11px; font-size:13px}
-    .hint{color:var(--muted); font-size:13px; margin:6px 0 14px}
+    .hint{color:var(--muted); font-size:13.5px; margin:8px 0 14px}
     .panel{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:16px}
-    .panel ol{padding-left:20px; margin:8px 0 14px}
     .panel input[type=password]{
       width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:12px;
       font:inherit; margin-bottom:10px;
+    }
+    .install{
+      margin:0 0 14px; padding:10px 12px; border-radius:12px;
+      background:rgba(255,79,163,.08); border:1px solid rgba(255,79,163,.22);
+      color:var(--pink-deep); font-size:13.5px; font-weight:700;
     }
     .add{display:inline-flex; align-items:center; gap:6px}
     .add input{display:none}
@@ -64,6 +76,11 @@
       position:absolute; top:6px; right:6px; padding:3px 8px; border-radius:999px;
       background:var(--pink); color:#fff; font-size:11px; font-weight:800;
     }
+    .tile .play{
+      position:absolute; left:50%; top:40%; transform:translate(-50%,-50%);
+      width:40px; height:40px; border-radius:999px; background:rgba(17,24,39,.55);
+      color:#fff; display:grid; place-items:center; font-size:16px; pointer-events:none;
+    }
     .tools{display:flex; gap:6px; padding:6px}
     .tools button{
       flex:1; appearance:none; border:1px solid var(--line); background:#fff; border-radius:10px;
@@ -81,72 +98,120 @@
       padding:12px 16px calc(12px + env(safe-area-inset-bottom));
       background:#fff; border-top:1px solid var(--line);
     }
-    .bar .status{flex:1; font-size:13.5px; color:var(--muted)}
-    .bar .status.ok{color:#047857; font-weight:700}
-    .bar .status.err{color:var(--red); font-weight:700}
+    .status{flex:1; font-size:13.5px; color:var(--muted); margin:0}
+    .status.ok{color:#047857; font-weight:700}
+    .status.err{color:var(--red); font-weight:700}
     .hidden{display:none !important}
   </style>
 </head>
 <body>
   <header>
     <img src="assets/logo-144.png" alt="">
-    <h1>Work photos <small>รูปผลงาน • Nailgel Bytip</small></h1>
-    <button class="btn btn-ghost btn-small hidden" id="logout" type="button">Log out · ออก</button>
+    <h1><span data-t="title"></span> <small>Nailgel Bytip</small></h1>
+    <button class="btn btn-ghost btn-small" id="lang" type="button"></button>
+    <button class="btn btn-ghost btn-small hidden" id="logout" type="button" data-t="logout"></button>
   </header>
 
   <main>
     <!-- first visit on a phone: paste the GitHub key once, it stays on this phone -->
     <section class="panel hidden" id="login">
-      <h2 style="margin:0 0 6px; font-size:17px">Connect · เชื่อมต่อ</h2>
-      <p class="hint">Paste the GitHub key once. It stays saved on this phone only.<br>
-        วางรหัส GitHub ครั้งเดียว ระบบจะจำไว้ในโทรศัพท์เครื่องนี้</p>
+      <p class="install hidden" id="installHint" data-t="install"></p>
+      <h2 style="margin:0 0 6px; font-size:17px" data-t="connectTitle"></h2>
+      <p class="hint" data-t="connectHint"></p>
       <input type="password" id="token" placeholder="github_pat_…" autocomplete="off">
-      <button class="btn" id="connect" type="button">Connect · เชื่อมต่อ</button>
+      <button class="btn" id="connect" type="button" data-t="connect"></button>
       <p class="status err" id="loginErr"></p>
     </section>
 
     <section class="hidden" id="editor">
-      <label class="btn add">＋ Add photos · เพิ่มรูป
-        <input type="file" id="files" accept="image/*" multiple>
+      <label class="btn add"><span data-t="add"></span>
+        <input type="file" id="files" accept="image/*,video/*" multiple>
       </label>
-      <p class="hint">
-        ◀ ▶ change the order (1 = first on the site). ✕ removes a photo, tap again to keep it.
-        Nothing changes on the site until you press <b>Publish</b>.<br>
-        ◀ ▶ เปลี่ยนลำดับ (1 = รูปแรกบนเว็บ) · ✕ ลบรูป กดอีกครั้งเพื่อเก็บไว้ ·
-        เว็บจะเปลี่ยนเมื่อกด <b>เผยแพร่</b> เท่านั้น
-      </p>
+      <p class="hint" data-t="help"></p>
       <div class="grid" id="grid"></div>
     </section>
   </main>
 
   <div class="bar hidden" id="bar">
     <span class="status" id="status"></span>
-    <button class="btn" id="publish" type="button" disabled>Publish · เผยแพร่</button>
+    <button class="btn" id="publish" type="button" disabled data-t="publish"></button>
   </div>
 
 <script>
 /* Photo manager for the "Work photos" strip on index.html.
    The site is plain GitHub Pages, so this page edits the repository directly
-   through the GitHub API: photos/gallery.json holds the order, photos/ and
-   photos/thumb/ hold the images. One Publish = one commit. */
+   through the GitHub API: photos/gallery.json holds the order, photos/ holds
+   the photos and videos, photos/thumb/ a .jpg still for each. One Publish = one commit. */
 const REPO = "Nailbytip/Price";
 const BRANCH = "main";
 const LIST_PATH = "photos/gallery.json";
 const TOKEN_KEY = "nbt-admin-token";
-const FULL_MAX = 1600;   // long side of the photo opened in the lightbox
-const THUMB_W = 450;     // width of the strip thumbnail, like the existing ones
+const LANG_KEY = "nbt-admin-lang";
+const FULL_MAX = 1600;     // long side of the photo opened in the lightbox
+const THUMB_W = 450;       // width of the strip thumbnail, like the existing ones
+const VIDEO_MAX_MB = 50;   // GitHub refuses files over 100 MB; phones choke well before
+
+const TEXT = {
+  th: {
+    title: "รูปผลงาน", logout: "ออกจากระบบ", switchTo: "EN",
+    install: "แนะนำ: เพิ่มแอปนี้ไปที่หน้าจอโฮมก่อน — กดปุ่มแชร์ ⬆︎ แล้วเลือก “เพิ่มไปยังหน้าจอโฮม” จากนั้นเปิดแอปจากหน้าจอโฮมแล้ววางรหัส",
+    connectTitle: "เชื่อมต่อ", connect: "เชื่อมต่อ",
+    connectHint: "วางรหัส GitHub ครั้งเดียว ระบบจะจำไว้ในโทรศัพท์เครื่องนี้",
+    add: "＋ เพิ่มรูป / วิดีโอ",
+    help: "รูปใหม่จะอยู่ลำดับแรก · ◀ ▶ เปลี่ยนลำดับ (1 = แรกสุดบนเว็บ) · ✕ ลบ กดอีกครั้งเพื่อเก็บไว้ · เว็บจะเปลี่ยนเมื่อกด “เผยแพร่” เท่านั้น",
+    publish: "เผยแพร่", isNew: "ใหม่",
+    dirty: "ยังไม่ได้เผยแพร่", preparing: "กำลังเตรียม…",
+    uploading: (i, n) => `กำลังอัปโหลด ${i} / ${n}…`, publishing: "กำลังเผยแพร่…",
+    done: "เสร็จแล้ว! เว็บจะอัปเดตใน 1–2 นาที",
+    keyRefused: "รหัสใช้ไม่ได้ — ออกจากระบบแล้ววางรหัสใหม่", publishFail: "เผยแพร่ไม่สำเร็จ ลองอีกครั้ง",
+    badKey: "รหัสนี้ใช้ไม่ได้", noNet: "ไม่มีสัญญาณ ลองอีกครั้ง",
+    readFail: "อ่านไฟล์ไม่ได้", tooBig: `วิดีโอใหญ่เกิน (สูงสุด ${VIDEO_MAX_MB} MB) — ตัดให้สั้นลง`,
+  },
+  en: {
+    title: "Work photos", logout: "Log out", switchTo: "ไทย",
+    install: "Tip: add this app to your Home Screen first — tap Share ⬆︎ then “Add to Home Screen”. Open it from there and paste the key.",
+    connectTitle: "Connect", connect: "Connect",
+    connectHint: "Paste the GitHub key once. It stays saved on this phone.",
+    add: "＋ Add photos / videos",
+    help: "New items go first · ◀ ▶ change the order (1 = first on the site) · ✕ removes, tap again to keep · Nothing changes on the site until you press “Publish”.",
+    publish: "Publish", isNew: "NEW",
+    dirty: "Not published yet", preparing: "Preparing…",
+    uploading: (i, n) => `Uploading ${i} / ${n}…`, publishing: "Publishing…",
+    done: "Done! On the site in 1–2 min",
+    keyRefused: "Key refused — log out and paste a new key", publishFail: "Could not publish, try again",
+    badKey: "This key does not work", noNet: "No connection, try again",
+    readFail: "A file could not be read", tooBig: `Video too big (max ${VIDEO_MAX_MB} MB) — shorten it`,
+  },
+};
 
 const $ = (s) => document.querySelector(s);
-let token = "";
-let items = [];          // {name, isNew, removed, preview, full, thumb}
-let busy = false;
+const store = {
+  get(k) { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } },
+  set(k, v) { try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch (e) { /* kept for this visit only */ } },
+};
+const isVideoName = (n) => /\.(mp4|mov|m4v|webm)$/i.test(n);
+const thumbName = (n) => n.replace(/\.[^.]+$/, ".jpg");
 
-function readToken() {
-  try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; }
+let lang = store.get(LANG_KEY) === "en" ? "en" : "th";
+let token = "";
+let items = [];          // {name, isNew, removed, pos, preview, full, thumb}
+let busy = false;
+let lastStatus = null;   // [key, kind, ...args] so a language switch re-says it
+
+const t = (k, ...a) => (typeof TEXT[lang][k] === "function" ? TEXT[lang][k](...a) : TEXT[lang][k]);
+
+function applyLang() {
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach((el) => { el.textContent = t(el.dataset.t); });
+  $("#lang").textContent = t("switchTo");
+  if (lastStatus) setStatus(...lastStatus);
+  if (items.length) render();
 }
-function saveToken(t) {
-  try { t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); } catch (e) { /* kept for this visit only */ }
-}
+$("#lang").addEventListener("click", () => {
+  lang = lang === "th" ? "en" : "th";
+  store.set(LANG_KEY, lang);
+  applyLang();
+});
 
 async function api(path, opts = {}) {
   const r = await fetch(`https://api.github.com/repos/${REPO}/${path}`, {
@@ -165,39 +230,37 @@ async function api(path, opts = {}) {
   return r.json();
 }
 
-function setStatus(text, kind = "") {
+function setStatus(key, kind = "", ...args) {
+  lastStatus = key ? [key, kind, ...args] : null;
   const s = $("#status");
-  s.textContent = text;
+  s.textContent = key ? t(key, ...args) : "";
   s.className = "status " + kind;
 }
 
 function isDirty() {
-  return items.some((it) => it.isNew || it.removed) || items.some((it, i) => it.pos !== i);
+  return items.some((it, i) => it.isNew || it.removed || it.pos !== i);
 }
 
 function refreshBar() {
   const dirty = isDirty();
   $("#publish").disabled = busy || !dirty;
-  if (!busy && dirty) setStatus("Not published yet · ยังไม่เผยแพร่");
+  if (!busy && dirty) setStatus("dirty");
 }
 
 function render() {
-  const grid = $("#grid");
   let n = 0;
-  grid.innerHTML = items.map((it, i) => {
-    const label = it.removed ? "✕" : ++n;
-    return `
+  $("#grid").innerHTML = items.map((it, i) => `
       <div class="tile${it.removed ? " removed" : ""}">
-        <img src="${it.preview || `photos/thumb/${it.name}`}" alt="" loading="lazy">
-        <span class="num">${label}</span>
-        ${it.isNew ? '<span class="new">NEW</span>' : ""}
+        <img src="${it.preview || `photos/thumb/${thumbName(it.name)}`}" alt="" loading="lazy">
+        <span class="num">${it.removed ? "✕" : ++n}</span>
+        ${it.isNew ? `<span class="new">${t("isNew")}</span>` : ""}
+        ${isVideoName(it.name) ? '<span class="play">▶</span>' : ""}
         <div class="tools">
           <button type="button" data-act="left" data-i="${i}" ${i === 0 ? "disabled" : ""} aria-label="Move earlier">◀</button>
           <button type="button" data-act="right" data-i="${i}" ${i === items.length - 1 ? "disabled" : ""} aria-label="Move later">▶</button>
           <button type="button" class="del" data-act="del" data-i="${i}" aria-label="Remove">${it.removed ? "↺" : "✕"}</button>
         </div>
-      </div>`;
-  }).join("");
+      </div>`).join("");
   refreshBar();
 }
 
@@ -208,14 +271,28 @@ $("#grid").addEventListener("click", (e) => {
   if (b.dataset.act === "left" && i > 0) [items[i - 1], items[i]] = [items[i], items[i - 1]];
   else if (b.dataset.act === "right" && i < items.length - 1) [items[i + 1], items[i]] = [items[i], items[i + 1]];
   else if (b.dataset.act === "del") {
-    // a new photo that was never published just goes away
+    // a new item that was never published just goes away
     if (items[i].isNew) items.splice(i, 1);
     else items[i].removed = !items[i].removed;
   }
   render();
 });
 
-/* ---------- resize on the phone before upload: a 4 MB camera shot becomes ~250 KB ---------- */
+/* ---------- prepare files on the phone: photos are shrunk (a 4 MB shot becomes ~250 KB),
+              videos are kept as they are and get a still frame for the strip ---------- */
+function toJpeg(src, w, h) {
+  const c = document.createElement("canvas");
+  c.width = w; c.height = h;
+  const g = c.getContext("2d");
+  if (src) g.drawImage(src, 0, 0, w, h);
+  else {
+    // no frame could be read from the video: a plain pink still with a play mark
+    g.fillStyle = "#ff4fa3"; g.fillRect(0, 0, w, h);
+    g.fillStyle = "#fff"; g.beginPath();
+    g.moveTo(w * .42, h * .4); g.lineTo(w * .42, h * .6); g.lineTo(w * .6, h * .5); g.fill();
+  }
+  return new Promise((resolve) => c.toBlob(resolve, "image/jpeg", 0.85));
+}
 function loadImage(file) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -224,42 +301,60 @@ function loadImage(file) {
     img.src = URL.createObjectURL(file);
   });
 }
-function toJpeg(img, w, h) {
-  const c = document.createElement("canvas");
-  c.width = w; c.height = h;
-  c.getContext("2d").drawImage(img, 0, 0, w, h);
-  return new Promise((resolve) => c.toBlob(resolve, "image/jpeg", 0.85));
+function loadVideoFrame(file) {
+  return new Promise((resolve) => {
+    const v = document.createElement("video");
+    const give = (ok) => { clearTimeout(timer); resolve(ok ? v : null); };
+    const timer = setTimeout(() => give(false), 12000);
+    v.muted = true; v.playsInline = true; v.preload = "auto";
+    v.onloadeddata = () => { v.currentTime = Math.min(0.5, (v.duration || 1) / 2); };
+    v.onseeked = () => give(v.videoWidth > 0);
+    v.onerror = () => give(false);
+    v.src = URL.createObjectURL(file);
+    v.load();
+  });
+}
+function uniqueBase(index) {
+  return `${Date.now().toString(36)}-${index}`;
 }
 async function prepare(file, index) {
+  const base = uniqueBase(index);
+  if (file.type.startsWith("video/") || isVideoName(file.name)) {
+    if (file.size > VIDEO_MAX_MB * 1024 * 1024) throw new Error("tooBig");
+    const fromName = (file.name.match(/\.(mp4|mov|m4v|webm)$/i) || [])[1];
+    const ext = (fromName || (file.type === "video/quicktime" ? "mov" : "mp4")).toLowerCase();
+    const v = await loadVideoFrame(file);
+    const W = v ? v.videoWidth : 4, H = v ? v.videoHeight : 5;
+    const thumb = await toJpeg(v, THUMB_W, Math.round(H * THUMB_W / W));
+    return { name: `${base}.${ext}`, isNew: true, removed: false, full: file, thumb, preview: URL.createObjectURL(thumb) };
+  }
   const img = await loadImage(file);
   const W = img.naturalWidth, H = img.naturalHeight;
   const k = Math.min(1, FULL_MAX / Math.max(W, H));
   const full = await toJpeg(img, Math.round(W * k), Math.round(H * k));
   const tw = Math.min(THUMB_W, W);
   const thumb = await toJpeg(img, tw, Math.round(H * tw / W));
-  return {
-    name: `${Date.now().toString(36)}-${index}.jpg`,
-    isNew: true, removed: false,
-    full, thumb, preview: URL.createObjectURL(thumb),
-  };
+  return { name: `${base}.jpg`, isNew: true, removed: false, full, thumb, preview: URL.createObjectURL(thumb) };
 }
 
 $("#files").addEventListener("change", async (e) => {
   const files = Array.from(e.target.files || []);
   e.target.value = "";
   if (!files.length) return;
-  setStatus("Preparing photos… · กำลังเตรียมรูป…");
+  setStatus("preparing");
   const added = [];
+  let problem = "";
   for (let i = 0; i < files.length; i++) {
     try { added.push(await prepare(files[i], i)); }
-    catch (err) { setStatus("A photo could not be read · อ่านรูปไม่ได้", "err"); }
+    catch (err) { problem = err.message === "tooBig" ? "tooBig" : "readFail"; }
   }
-  // newest work goes first on the site; ◀ ▶ can move them after
+  // new work goes first so it is the first thing visitors see; ◀ ▶ can move it after
   items = [...added, ...items];
   render();
+  if (problem) setStatus(problem, "err");
 });
 
-/* ---------- publish: one commit with new images, removed images and the new order ---------- */
+/* ---------- publish: one commit with new files, removed files and the new order ---------- */
 function blobToBase64(blob) {
   return new Promise((resolve, reject) => {
     const r = new FileReader();
@@ -280,21 +375,23 @@ $("#publish").addEventListener("click", async () => {
   refreshBar();
   try {
     const tree = [];
+    const file = (path, sha) => ({ path, mode: "100644", type: "blob", sha });
     const fresh = items.filter((it) => it.isNew && !it.removed);
     for (let i = 0; i < fresh.length; i++) {
-      setStatus(`Uploading ${i + 1} / ${fresh.length}… · กำลังอัปโหลด`);
-      tree.push({ path: `photos/${fresh[i].name}`, mode: "100644", type: "blob", sha: await uploadBlob(fresh[i].full) });
-      tree.push({ path: `photos/thumb/${fresh[i].name}`, mode: "100644", type: "blob", sha: await uploadBlob(fresh[i].thumb) });
+      setStatus("uploading", "", i + 1, fresh.length);
+      tree.push(file(`photos/${fresh[i].name}`, await uploadBlob(fresh[i].full)));
+      tree.push(file(`photos/thumb/${thumbName(fresh[i].name)}`, await uploadBlob(fresh[i].thumb)));
     }
     for (const it of items.filter((x) => x.removed && !x.isNew)) {
-      tree.push({ path: `photos/${it.name}`, mode: "100644", type: "blob", sha: null });
-      tree.push({ path: `photos/thumb/${it.name}`, mode: "100644", type: "blob", sha: null });
+      tree.push(file(`photos/${it.name}`, null));
+      tree.push(file(`photos/thumb/${thumbName(it.name)}`, null));
     }
+    // the site shows exactly this list, in this order
     const kept = items.filter((it) => !it.removed);
     tree.push({ path: LIST_PATH, mode: "100644", type: "blob",
                 content: JSON.stringify(kept.map((it) => it.name), null, 1) + "\n" });
 
-    setStatus("Publishing… · กำลังเผยแพร่…");
+    setStatus("publishing");
     const ref = await api(`git/ref/heads/${BRANCH}`);
     const head = await api(`git/commits/${ref.object.sha}`);
     const newTree = await api("git/trees", { method: "POST", body: JSON.stringify({ base_tree: head.tree.sha, tree }) });
@@ -305,20 +402,19 @@ $("#publish").addEventListener("click", async () => {
     items = kept.map((it, i) => ({ ...it, isNew: false, pos: i }));
     busy = false;
     render();
-    setStatus("Done! Live on the site in 1–2 min · เสร็จแล้ว! เว็บจะอัปเดตใน 1–2 นาที", "ok");
+    setStatus("done", "ok");
   } catch (err) {
     busy = false;
     refreshBar();
-    setStatus(err.status === 401 || err.status === 403
-      ? "Key refused — log out and paste a new key · รหัสใช้ไม่ได้"
-      : "Could not publish, try again · เผยแพร่ไม่สำเร็จ ลองอีกครั้ง", "err");
+    setStatus(err.status === 401 || err.status === 403 ? "keyRefused" : "publishFail", "err");
   }
 });
 
 /* ---------- start ---------- */
 async function load() {
-  const file = await api(`contents/${LIST_PATH}?ref=${BRANCH}`);
-  const json = new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
+  // read through the API, not the site: the site can lag 1–2 min behind a publish
+  const f = await api(`contents/${LIST_PATH}?ref=${BRANCH}`);
+  const json = new TextDecoder().decode(Uint8Array.from(atob(f.content.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
   items = JSON.parse(json).map((name, i) => ({ name, isNew: false, removed: false, pos: i }));
   $("#login").classList.add("hidden");
   $("#editor").classList.remove("hidden");
@@ -328,28 +424,32 @@ async function load() {
   render();
 }
 
-async function connect(t) {
-  token = t.trim();
+async function connect(value) {
+  token = value.trim();
   if (!token) return;
   $("#loginErr").textContent = "";
   try {
     await load();
-    saveToken(token);
+    store.set(TOKEN_KEY, token);
   } catch (err) {
-    saveToken("");
+    store.set(TOKEN_KEY, "");
     $("#login").classList.remove("hidden");
-    $("#loginErr").textContent = err.status === 401 || err.status === 403 || err.status === 404
-      ? "This key does not work · รหัสนี้ใช้ไม่ได้"
-      : "No connection, try again · ไม่มีสัญญาณ ลองอีกครั้ง";
+    $("#loginErr").textContent = t([401, 403, 404].includes(err.status) ? "badKey" : "noNet");
   }
 }
 
 $("#connect").addEventListener("click", () => connect($("#token").value));
 $("#token").addEventListener("keydown", (e) => { if (e.key === "Enter") connect($("#token").value); });
-$("#logout").addEventListener("click", () => { saveToken(""); location.reload(); });
+$("#logout").addEventListener("click", () => { store.set(TOKEN_KEY, ""); location.reload(); });
 window.addEventListener("beforeunload", (e) => { if (isDirty()) { e.preventDefault(); e.returnValue = ""; } });
 
-const saved = readToken();
+// in Safari (not yet on the Home Screen), say how to install first: the Home Screen
+// app keeps its own storage, so a key pasted in Safari would not follow it there
+const standalone = window.navigator.standalone || matchMedia("(display-mode: standalone)").matches;
+if (/iPhone|iPad/.test(navigator.userAgent) && !standalone) $("#installHint").classList.remove("hidden");
+
+applyLang();
+const saved = store.get(TOKEN_KEY);
 if (saved) connect(saved);
 else $("#login").classList.remove("hidden");
 </script>

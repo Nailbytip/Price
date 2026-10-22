@@ -489,6 +489,16 @@ h3{margin:0; font-size:15px; font-weight:900}
   transition: transform .18s ease, box-shadow .18s ease;
 }
 .shot:hover{transform: translateY(-2px); box-shadow: 0 24px 55px rgba(17,24,39,.10)}
+/* video in the work strip: a play mark over its still frame */
+.shot.is-video{position:relative}
+.shot.is-video::after{
+  content:"";
+  position:absolute; left:50%; top:50%;
+  width:48px; height:48px; margin:-24px 0 0 -24px;
+  border-radius:999px;
+  background: rgba(17,24,39,.55) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 6.5v11l9-5.5z' fill='%23fff'/%3E%3C/svg%3E") center/26px no-repeat;
+  pointer-events:none;
+}
 .shot img{
   width:100%;
   height:auto;
@@ -695,6 +705,8 @@ body.plain{padding-bottom:28px}          /* no sticky booking bar on that page *
   max-height: calc(100vh - 36px);
   background:#fff;
 }
+.lightbox-img[hidden]{display:none}
+.lightbox-video{background:#000}
 .lightbox-close{
   position:absolute;
   top:10px; right:10px;

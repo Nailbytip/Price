@@ -17,6 +17,9 @@ const PHOTO_LIST          = "photos/gallery.json";  // work photos, in display o
 
 const qs = (s) => document.querySelector(s);
 const qsa = (s) => Array.from(document.querySelectorAll(s));
+// work photos and videos share one list; every item has a .jpg still in photos/thumb/
+const isVideo = (src) => /\.(mp4|mov|m4v|webm)$/i.test(src);
+const thumbOf = (src) => src.replace(/^photos\//, "photos/thumb/").replace(/\.[^./]+$/, ".jpg");
 
 /* ---------- Copy that JS builds at runtime (EN / TH / RU) ---------- */
 
@@ -296,6 +299,7 @@ setTimeout(() => {
 /* ---------- Lightbox (browse the whole set, swipe or arrows) ---------- */
 const lb = qs("#lightbox");
 const lbImg = qs("#lightboxImg");
+const lbVideo = qs("#lightboxVideo");
 const lbClose = qs("#lightboxClose");
 const lbPrev = qs("#lightboxPrev");
 const lbNext = qs("#lightboxNext");
@@ -307,7 +311,18 @@ let lbIndex = 0;
 function showLightboxAt(i) {
   if (!lbList.length || !lbImg) return;
   lbIndex = (i + lbList.length) % lbList.length; // wraps at both ends
-  lbImg.src = lbList[lbIndex];
+  const src = lbList[lbIndex];
+  const video = isVideo(src) && lbVideo;
+  stopVideo();
+  lbImg.hidden = !!video;
+  if (video) {
+    lbVideo.hidden = false;
+    lbVideo.poster = thumbOf(src);
+    lbVideo.src = src;
+    lbVideo.play().catch(() => { /* the visitor taps play */ });
+  } else {
+    lbImg.src = src;
+  }
   if (lbCount) lbCount.textContent = `${lbIndex + 1} / ${lbList.length}`;
 }
 
@@ -326,6 +341,15 @@ function closeLightbox() {
   lb.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
   if (lbImg) lbImg.src = "";
+  stopVideo();
+}
+
+function stopVideo() {
+  if (!lbVideo || lbVideo.hidden) return;
+  lbVideo.pause();
+  lbVideo.removeAttribute("src");
+  lbVideo.load();
+  lbVideo.hidden = true;
 }
 
 const isOpen = () => !!lb && lb.classList.contains("open");
@@ -365,10 +389,10 @@ if (lb) {
     // the strip shows 450px thumbnails (~35 KB); the lightbox gets the originals
     fulls = names.map((n) => `photos/${n}`);
     // all are in the DOM but lazy: only the few on screen are downloaded
-    strip.innerHTML = names.map((n, i) => `
-      <button class="shot" type="button" data-i="${i}">
+    strip.innerHTML = fulls.map((src, i) => `
+      <button class="shot${isVideo(src) ? " is-video" : ""}" type="button" data-i="${i}">
         <img loading="lazy" decoding="async" width="400" height="500"
-             src="photos/thumb/${n}" alt="Nailgel Bytip work photo">
+             src="${thumbOf(src)}" alt="Nailgel Bytip work ${isVideo(src) ? "video" : "photo"}">
       </button>`).join("");
     syncArrows();
   }
